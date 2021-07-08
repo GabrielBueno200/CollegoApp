@@ -2,16 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
+using Domain.Validators;
+using API.Configurations.AutoMapper;
+using API.Controllers;
 using API.Repositories.Entities;
 using API.Repositories.Interfaces;
 using API.Services.Entities;
 using API.Services.Interfaces;
-using Domain;
+using API.Utils;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,32 +44,49 @@ namespace API
 
             services.AddControllers();
             
-            
             #region Identity and DbContext Configurations 
 
             services.AddDbContext<DataContext>(opt => {
                 opt.UseNpgsql(Configuration["DBConnection:ConnectionString"]);
             });
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<DataContext>();
 
             #endregion
 
+            #region FluentValidation
+
+            services.AddValidatorsFromAssemblyContaining<UserRegisterDTOValidator>();
+
+
+            #endregion
 
             #region Repositories DI
             
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             #endregion
-
 
             #region ServicesDI
             
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient<ResponseResult>();
 
             #endregion
 
+            #region AutoMapper DI
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            
+            #endregion
 
             #region CorsConfigs
 

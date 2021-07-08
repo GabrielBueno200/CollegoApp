@@ -14,8 +14,5 @@ namespace Domain.DTOs
         [Required]
         public string Password {get; set; }
         
-        [Compare("Password")]
-        public string confirmPassword {get; set;}
-        
     }
 }

@@ -5,7 +5,7 @@ namespace Domain{
         
         public string FullName { get; set; }
 
-        public string pass {get ; set; }
-        
+        public byte[] ProfileThumbnail { get; set; }
+
     }
 }

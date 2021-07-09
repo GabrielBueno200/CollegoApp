@@ -2,18 +2,18 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Utils;
-using Domain;
+using Domain.Models;
 using Domain.DTOs;
 
 namespace API.Services.Interfaces
 {
     public interface IAccountService {
 
-        Task<ResponseResult> Create(UserRegisterDTO user);
+        Task CreateAsync(UserRegisterDTO user);
 
-        void Delete(Guid id);
+        Task DeleteAsync(Guid id);
         
-        Task<User> Edit(Guid id);
+        Task<User> EditAsync(Guid id);
 
         IQueryable<User> List();
          

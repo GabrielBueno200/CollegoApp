@@ -1,13 +1,13 @@
 using AutoMapper;
-using Domain;
+using Domain.Models;
 using Domain.DTOs;
 using Domain.ViewModels;
 
-namespace API.Configurations.AutoMapper
+namespace Domain.Configurations.AutoMapper
 {
-    public class UserSetup : Profile {
+    public class UserProfile : Profile {
         
-        public UserSetup(){
+        public UserProfile(){
 
             #region UserRegisterDTO to User
 

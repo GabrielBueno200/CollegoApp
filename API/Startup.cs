@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain;
+using Domain.Models;
 using Domain.Validators;
-using API.Configurations.AutoMapper;
+using Domain.Configurations.AutoMapper;
 using API.Controllers;
 using API.Repositories.Entities;
 using API.Repositories.Interfaces;
@@ -50,15 +50,15 @@ namespace API
                 opt.UseNpgsql(Configuration["DBConnection:ConnectionString"]);
             });
 
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
+            services.AddIdentity<User, IdentityRole>(options => {
+                    options.User.RequireUniqueEmail = true;
                     options.Password.RequiredLength = 6;
-                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                })
-                .AddEntityFrameworkStores<DataContext>();
+                    options.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<DataContext>();
 
             #endregion
 
@@ -78,13 +78,13 @@ namespace API
             #region ServicesDI
             
             services.AddScoped<IAccountService, AccountService>();
-            services.AddTransient<ResponseResult>();
+            services.AddScoped<ResponseResult>();
 
             #endregion
 
             #region AutoMapper DI
             
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(UserProfile).Assembly);
             
             #endregion
 

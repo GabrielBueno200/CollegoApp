@@ -7,10 +7,11 @@ namespace Domain.Validators
         
         public UserRegisterDTOValidator(){
 
-            RuleFor(x => x.Email).EmailAddress().NotNull().WithMessage(ErrorsContants.FORGOT_FIELD("{PropertyName}"));
-            RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).WithMessage(ErrorsContants.PASSWORD_CONFIRM);
-            RuleFor(x => x.userName).NotNull().WithMessage(ErrorsContants.FORGOT_FIELD("{PropertyName}"));
-            RuleFor(x => x.FullName).NotNull().WithMessage(ErrorsContants.FORGOT_FIELD("{PropertyName}"));
+            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.Password).Equal(x => x.ConfirmPassword);
+            RuleFor(x => x.userName).NotNull();
+            RuleFor(x => x.FullName).NotNull();
+            RuleFor(x => x.TermsAccepted).NotNull().Must((x, value, ctx) => value);
         }
 
         

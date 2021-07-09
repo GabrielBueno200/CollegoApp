@@ -6,35 +6,41 @@ using Microsoft.AspNetCore.Identity;
 
 namespace API.Utils
 {
-    public static class ResponseErrors {
-        public static List<ResponseResult> getIdentityResultErrors(IdentityResult result){
+    public class ResponseErrors {
 
-            return result.Errors.Select(err => new ResponseResult {
-                StatusCode = HttpStatusCode.BadRequest,
+        public ErrorType Type { get; set;}
+
+        public string Message {get; set;} 
+ 
+        
+        public static List<ResponseErrors> getIdentityResultErrors(IdentityResult result){
+
+            return result.Errors.Select(err => new ResponseErrors{
+                Type = ErrorType.VALIDATION_ERROR,
                 Message = err.Description
             }).ToList();
 
         }
 
-        public static List<ResponseResult> getResultErrors(ValidationResult result){
+        public static List<ResponseErrors> getResultErrors(ValidationResult result){
 
-            return result.Errors.Select(err => new ResponseResult {
-                StatusCode = HttpStatusCode.BadRequest,
+            return result.Errors.Select(err => new ResponseErrors {
+                Type = ErrorType.VALIDATION_ERROR,
                 Message = err.ErrorMessage 
             }).ToList();
 
         }
 
-        public static List<ResponseResult> AddError(List<ResponseResult> Errors, string error, HttpStatusCode statusCode){ 
-            Errors.Add(new ResponseResult {
-                StatusCode = statusCode,
+        public static List<ResponseErrors> AddError(List<ResponseErrors> Errors, string error, ErrorType type = ErrorType.VALIDATION_ERROR){ 
+            Errors.Add(new ResponseErrors {
+                Type = type,
                 Message = error
             });
 
             return Errors;
         }
 
-        public static List<ResponseResult> Merge(List<ResponseResult> A, List<ResponseResult> B) => A.Concat(B).ToList();
+        public static List<ResponseErrors> Merge(List<ResponseErrors> A, List<ResponseErrors> B) => A.Concat(B).ToList();
         
     }
 }

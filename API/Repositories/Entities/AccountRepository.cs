@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Domain;
+using Domain.Models;
 using System.Threading.Tasks;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -15,17 +15,32 @@ namespace API.Repositories.Entities
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> Create(User user, string password) => await _userManager.CreateAsync(user, password);
-        
-        public async Task<IdentityResult> Delete(User user) => await _userManager.DeleteAsync(user);
+        public async Task<IdentityResult> CreateAsync(User user, string password){ 
+            var create = await _userManager.CreateAsync(user, password);
 
-        public async Task<IdentityResult> Edit(User user) => await _userManager.UpdateAsync(user);
+            var role = await _userManager.AddToRoleAsync(user, "STUDENT");
+
+            if (!role.Succeeded && !role.Succeeded){
+                create.Errors.Concat(role.Errors);
+
+                return create;
+            }
+
+            else if (!create.Succeeded || !role.Succeeded)
+                return create.Succeeded ? role : create;
+
+            return create;
+        }
+        
+        public async Task<IdentityResult> DeleteAsync(User user) => await _userManager.DeleteAsync(user);
+
+        public async Task<IdentityResult> EditAsync(User user) => await _userManager.UpdateAsync(user);
 
         public IQueryable<User> List() => _userManager.Users;
 
         public async Task<User> FindByEmailAsync(string email) => await _userManager.FindByEmailAsync(email);
 
-        public async Task<User> FindByUsername(string username) => await _userManager.FindByNameAsync(username);
+        public async Task<User> FindByUsernameAsync(string username) => await _userManager.FindByNameAsync(username);
 
         public async Task<IdentityResult> ValidateAsync(IUserValidator<User> validator, User user) => await validator.ValidateAsync(_userManager, user); 
 

@@ -7,18 +7,20 @@ using System.Web;
 namespace API.Utils
 {
     public class ResponseResult : IResponseResult{
-        public HttpStatusCode StatusCode {get; set;}
 
-        public string Message {get; set;} 
 
-        public List<ResponseResult> Errors {get; set;}
+        public List<ResponseErrors> Errors { get; set; } = new List<ResponseErrors>();
 
-        public bool HasErrors  { get {return Errors != null;} }
+        public bool HasErrors  { get { return Errors.Count > 0;} }
+        
+        public string EntityNotFound { get { 
+            return Errors.Where(x => x.Type == ErrorType.ENTITY_NOT_FOUND).FirstOrDefault()?.Message;
+        }}
 
-        public string JsonErrors { get { 
-            return JsonSerializer.Serialize(new {
-                data = Errors.Select(e => e.Message)
-            });
+        public object JsonErrors { get { 
+            return new {
+                data = Errors
+            };
         }}
         
     }

@@ -12,6 +12,14 @@ namespace Domain.DTOs
         
         public string ConfirmPassword { get; set; }
 
+        public string University { get; set; }
+
+        public string CourseId { get; set; }
+
+        public string NotListedCourse { get; set; }
+
+        public bool TermsAccepted { get; set; }
+
         public byte[] ProfileThumbnail { get; set; } 
         
     }

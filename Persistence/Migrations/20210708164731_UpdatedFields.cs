@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class UpdatedThumbfield : Migration
+    public partial class UpdatedFields : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

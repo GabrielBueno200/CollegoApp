@@ -6,7 +6,7 @@ using API.Repositories.Interfaces;
 using API.Services.Interfaces;
 using API.Utils;
 using AutoMapper;
-using Domain;
+using Domain.Models;
 using Domain.DTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +37,7 @@ namespace API.Services.Entities
             this.responseHandler = responseHandler;
         }
 
-        public async Task<ResponseResult> Create(UserRegisterDTO userDto){
+        public async Task CreateAsync(UserRegisterDTO userDto){
 
             #region DTO Validation
             
@@ -45,40 +45,53 @@ namespace API.Services.Entities
 
             if (!dtoValidationResult.IsValid) {
                 responseHandler.Errors = ResponseErrors.getResultErrors(dtoValidationResult);
-                return responseHandler;
+                return;
             }
             
             #endregion
 
+            
             #region User validation
 
             var user = _mapper.Map<User>(userDto);
+
+            var isEmailAvailable = (await _accountRepository.FindByEmailAsync(user.Email)) == null;
+            var isUsernameAvailable = (await _accountRepository.FindByUsernameAsync(user.UserName)) == null ;
+            
+            if (!isEmailAvailable){
+                responseHandler.Errors = ResponseErrors.AddError(responseHandler.Errors, "Endereço de e-mail já cadastrado!", ErrorType.NOT_AVAILABLE);
+                return;
+            }
+            
+            if (!isUsernameAvailable){
+                responseHandler.Errors = ResponseErrors.AddError(responseHandler.Errors, "Username já cadastrado!");
+                return;
+            }
 
             var userValidationResult = await _accountRepository.ValidateAsync(_userValidator, user);
 
             if (!userValidationResult.Succeeded){
                 responseHandler.Errors = ResponseErrors.getIdentityResultErrors(userValidationResult);
-                return responseHandler;
+                return;
             }
 
             #endregion
 
+            
             #region User Registration
             
-            await _accountRepository.Create(user, userDto.Password);
-            
-            return responseHandler;
+            await _accountRepository.CreateAsync(user, userDto.Password);
 
             #endregion
             
         }
 
-        public void Delete(Guid id)
+        public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> Edit(Guid id)
+        public Task<User> EditAsync(Guid id)
         {
             throw new NotImplementedException();
         }

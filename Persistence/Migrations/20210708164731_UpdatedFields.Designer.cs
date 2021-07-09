@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210708044240_UpdatedThumbfield")]
-    partial class UpdatedThumbfield
+    [Migration("20210708164731_UpdatedFields")]
+    partial class UpdatedFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

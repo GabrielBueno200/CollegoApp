@@ -1,6 +1,6 @@
 using System.Net;
 using System.Linq;
-using Domain;
+using Domain.Models;
 using Domain.DTOs;
 using API.Utils;
 using System.Threading.Tasks;
@@ -20,34 +20,33 @@ namespace API.Controllers
 
         private readonly IMapper _mapper;
 
-        public AccountController(IAccountService service, IMapper mapper){
+        private readonly ResponseResult responseHandler;
+
+        public AccountController(IAccountService service, ResponseResult responseHandler, IMapper mapper){
             _service = service;
             _mapper = mapper;
+            this.responseHandler = responseHandler;
         }
 
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> Create([FromBody] UserRegisterDTO userDto){
 
-            var result = await _service.Create(userDto);
+            await _service.CreateAsync(userDto);
 
-            if (result.HasErrors)
-                return BadRequest(result.JsonErrors);
+            if (responseHandler.HasErrors){
+                var errors = responseHandler.JsonErrors;
+            
+                if (responseHandler.EntityNotFound == null)
+                    return NotFound(errors);
+
+                return BadRequest(errors);
+            }
 
             var newUser = _mapper.Map<User>(userDto);
             var userViewModel = _mapper.Map<UserViewModel>(newUser);
         
             return Ok(userViewModel);
         }
-
-        [HttpGet]
-        [Route("teste")]
-        public async Task<IActionResult> Teste(){
-            return Ok("{eita}");
-        }
-
-        
-
-        
     }
 }

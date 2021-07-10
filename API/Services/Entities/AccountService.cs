@@ -50,24 +50,18 @@ namespace API.Services.Entities
             
             #endregion
 
-            
             #region User validation
 
             var user = _mapper.Map<User>(userDto);
 
-            var isEmailAvailable = (await _accountRepository.FindByEmailAsync(user.Email)) == null;
-            var isUsernameAvailable = (await _accountRepository.FindByUsernameAsync(user.UserName)) == null ;
-            
-            if (!isEmailAvailable){
-                responseHandler.Errors = ResponseErrors.AddError(responseHandler.Errors, "Endereço de e-mail já cadastrado!", ErrorType.NOT_AVAILABLE);
+            var isEmailAvailable = await IsEmailAvailable(user.Email);
+            if (!isEmailAvailable) 
                 return;
-            }
-            
-            if (!isUsernameAvailable){
-                responseHandler.Errors = ResponseErrors.AddError(responseHandler.Errors, "Username já cadastrado!");
-                return;
-            }
 
+            var isUsernameAvailable = await IsUsernameAvailable(user.UserName);
+            if (!isUsernameAvailable)
+                return;
+        
             var userValidationResult = await _accountRepository.ValidateAsync(_userValidator, user);
 
             if (!userValidationResult.Succeeded){
@@ -81,10 +75,32 @@ namespace API.Services.Entities
             #region User Registration
             
             await _accountRepository.CreateAsync(user, userDto.Password);
+            await _accountRepository.PutInStudentRoleAsync(user);
 
             #endregion
             
         }
+
+        public async Task<bool> IsEmailAvailable(string email){
+            var isEmailAvailable = (await _accountRepository.FindByEmailAsync(email)) == null;
+            
+            if (!isEmailAvailable)
+                responseHandler.AddError("Endereço de e-mail já cadastrado!", ErrorType.NOT_AVAILABLE);
+                        
+            return isEmailAvailable;
+        }
+
+        public async Task<bool> IsUsernameAvailable(string username){
+            var isUsernameAvailable = (await _accountRepository.FindByUsernameAsync(username)) == null ;
+            
+            if (!isUsernameAvailable)
+                responseHandler.AddError("Username já cadastrado!", ErrorType.NOT_AVAILABLE);
+
+            return isUsernameAvailable;
+        }
+
+
+
 
         public Task DeleteAsync(Guid id)
         {

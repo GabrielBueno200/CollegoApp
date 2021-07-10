@@ -8,9 +8,9 @@ namespace API.Utils
 {
     public class ResponseErrors {
 
-        public ErrorType Type { get; set;}
+        public ErrorType Type { get; set; }
 
-        public string Message {get; set;} 
+        public string Message {get; set; } 
  
         
         public static List<ResponseErrors> getIdentityResultErrors(IdentityResult result){
@@ -26,18 +26,16 @@ namespace API.Utils
 
             return result.Errors.Select(err => new ResponseErrors {
                 Type = ErrorType.VALIDATION_ERROR,
-                Message = err.ErrorMessage 
+                Message = $" {err.PropertyName}:  {err.ErrorMessage}" 
             }).ToList();
 
         }
 
-        public static List<ResponseErrors> AddError(List<ResponseErrors> Errors, string error, ErrorType type = ErrorType.VALIDATION_ERROR){ 
+        public static void AddError(List<ResponseErrors> Errors, string error, ErrorType type = ErrorType.VALIDATION_ERROR){ 
             Errors.Add(new ResponseErrors {
                 Type = type,
                 Message = error
             });
-
-            return Errors;
         }
 
         public static List<ResponseErrors> Merge(List<ResponseErrors> A, List<ResponseErrors> B) => A.Concat(B).ToList();

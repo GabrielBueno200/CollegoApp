@@ -13,15 +13,20 @@ namespace API.Utils
 
         public bool HasErrors  { get { return Errors.Count > 0;} }
         
-        public string EntityNotFound { get { 
-            return Errors.Where(x => x.Type == ErrorType.ENTITY_NOT_FOUND).FirstOrDefault()?.Message;
-        }}
+        public string ErrorFromType(ErrorType type) => Errors.Where(x => x.Type == type).FirstOrDefault()?.Message;
 
+        public void AddError(string name, ErrorType type){
+            ResponseErrors.AddError(Errors, name, type);
+        }
         public object JsonErrors { get { 
             return new {
-                data = Errors
+                errors = Errors.Select(x => new {
+                    type = x.Type.ToString(),
+                    message = x.Message
+                })
             };
         }}
+
         
     }
 }

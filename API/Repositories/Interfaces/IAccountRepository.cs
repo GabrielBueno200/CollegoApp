@@ -15,6 +15,8 @@ namespace API.Repositories.Interfaces
         
         Task<IdentityResult> EditAsync(User user);
 
+        Task<IdentityResult> PutInStudentRoleAsync(User user);
+
         Task<User> FindByEmailAsync(string email);
 
         Task<User> FindByUsernameAsync(string username);

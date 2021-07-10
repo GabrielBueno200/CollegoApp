@@ -35,16 +35,16 @@ namespace API.Controllers
             await _service.CreateAsync(userDto);
 
             if (responseHandler.HasErrors){
+
                 var errors = responseHandler.JsonErrors;
-            
-                if (responseHandler.EntityNotFound == null)
-                    return NotFound(errors);
+
+                if(responseHandler.ErrorFromType(ErrorType.NOT_AVAILABLE) != null)
+                    return Conflict(errors);
 
                 return BadRequest(errors);
             }
 
-            var newUser = _mapper.Map<User>(userDto);
-            var userViewModel = _mapper.Map<UserViewModel>(newUser);
+            var userViewModel = _mapper.Map<UserViewModel>(userDto);
         
             return Ok(userViewModel);
         }

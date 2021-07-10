@@ -15,22 +15,9 @@ namespace API.Repositories.Entities
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> CreateAsync(User user, string password){ 
-            var create = await _userManager.CreateAsync(user, password);
+        public async Task<IdentityResult> CreateAsync(User user, string password) => await _userManager.CreateAsync(user, password);
 
-            var role = await _userManager.AddToRoleAsync(user, "STUDENT");
-
-            if (!role.Succeeded && !role.Succeeded){
-                create.Errors.Concat(role.Errors);
-
-                return create;
-            }
-
-            else if (!create.Succeeded || !role.Succeeded)
-                return create.Succeeded ? role : create;
-
-            return create;
-        }
+        public async Task<IdentityResult> PutInStudentRoleAsync(User user) => await _userManager.AddToRoleAsync(user, "STUDENT");
         
         public async Task<IdentityResult> DeleteAsync(User user) => await _userManager.DeleteAsync(user);
 

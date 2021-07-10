@@ -21,6 +21,12 @@ namespace Domain.Configurations.AutoMapper
             
             #endregion
 
+            #region UserRegisterDTO to UserViewModel
+
+            CreateMap<UserRegisterDTO, UserViewModel>();
+
+            #endregion
+
         }
 
     }

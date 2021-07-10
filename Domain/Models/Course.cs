@@ -12,5 +12,8 @@ namespace Domain.Models
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public string NormalizedName { get; set; }
+
     }
 }

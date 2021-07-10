@@ -8,10 +8,12 @@ using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Domain.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [ApiController]
+    //[Authorize]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class AccountController : ControllerBase {
@@ -30,7 +32,8 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create([FromBody] UserRegisterDTO userDto){
+        //[AllowAnonymous]
+        public async Task<IActionResult> CreateAsync([FromBody] UserRegisterDTO userDto){
 
             await _service.CreateAsync(userDto);
 
@@ -48,5 +51,25 @@ namespace API.Controllers
         
             return Ok(userViewModel);
         }
+
+        [HttpDelete]
+        [Route("delete/{username}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string username){
+            
+            await _service.DeleteAsync(username);
+
+            if (responseHandler.HasErrors){
+
+                var errors = responseHandler.JsonErrors;
+
+                if(responseHandler.ErrorFromType(ErrorType.ENTITY_NOT_FOUND) != null)
+                    return NotFound(errors);
+
+                return BadRequest(errors);
+            }
+
+            return Ok(new { message = $"{username}, a sua conta foi deletada com sucesso" } );
+
+        } 
     }
 }

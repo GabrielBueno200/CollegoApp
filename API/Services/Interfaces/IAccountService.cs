@@ -11,7 +11,7 @@ namespace API.Services.Interfaces
 
         Task CreateAsync(UserRegisterDTO user);
 
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(string username);
         
         Task<User> EditAsync(Guid id);
 

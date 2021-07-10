@@ -11,4 +11,5 @@ namespace Domain.ViewModels
         public byte[] ProfileThumbnail { get; set; }
         
     }
+
 }

@@ -26,7 +26,7 @@ namespace API.Utils
 
             return result.Errors.Select(err => new ResponseErrors {
                 Type = ErrorType.VALIDATION_ERROR,
-                Message = $" {err.PropertyName}:  {err.ErrorMessage}" 
+                Message = $"{err.PropertyName}:  {err.ErrorMessage}" 
             }).ToList();
 
         }

@@ -50,6 +50,7 @@ namespace API.Services.Entities
             
             #endregion
 
+
             #region User validation
 
             var user = _mapper.Map<User>(userDto);
@@ -71,7 +72,7 @@ namespace API.Services.Entities
 
             #endregion
 
-            
+
             #region User Registration
             
             await _accountRepository.CreateAsync(user, userDto.Password);
@@ -99,21 +100,23 @@ namespace API.Services.Entities
             return isUsernameAvailable;
         }
 
+        public async Task DeleteAsync(string username){
+           
+           var user = await _accountRepository.FindByUsernameAsync(username);
 
+           if(user == null){
+                responseHandler.AddError($"Não encontrado usuário com o username {username}", ErrorType.ENTITY_NOT_FOUND);
+                return;
+            }
 
+            await _accountRepository.DeleteAsync(user);
+        }
 
-        public Task DeleteAsync(Guid id)
-        {
+        public Task<User> EditAsync(Guid id){
             throw new NotImplementedException();
         }
 
-        public Task<User> EditAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<User> List()
-        {
+        public IQueryable<User> List(){
             throw new NotImplementedException();
         }
     }

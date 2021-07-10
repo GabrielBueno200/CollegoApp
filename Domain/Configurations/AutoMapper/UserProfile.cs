@@ -9,23 +9,9 @@ namespace Domain.Configurations.AutoMapper
         
         public UserProfile(){
 
-            #region UserRegisterDTO to User
-
             CreateMap<UserRegisterDTO, User>();
-
-            #endregion
-
-            #region User to UserViewModel
-
             CreateMap<User, UserViewModel>();
-            
-            #endregion
-
-            #region UserRegisterDTO to UserViewModel
-
             CreateMap<UserRegisterDTO, UserViewModel>();
-
-            #endregion
 
         }
 

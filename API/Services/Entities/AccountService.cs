@@ -1,3 +1,4 @@
+using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,39 +6,47 @@ using System.Threading.Tasks;
 using API.Repositories.Interfaces;
 using API.Services.Interfaces;
 using API.Utils;
+using API.Settings;
 using AutoMapper;
 using Domain.Models;
 using Domain.DTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services.Entities
 {
     public class AccountService : IAccountService {
 
-
         private readonly IAccountRepository _accountRepository;
+
+        private readonly IUserService _userService;
         
         private readonly IMapper _mapper;
 
         private readonly IValidator<UserRegisterDTO> _registerDTOValidator;
 
-        private readonly IUserValidator<User> _userValidator;
+        private readonly JWTSettings _JWTSettings;
 
         private readonly ResponseResult responseHandler;
 
-        public AccountService(IAccountRepository accountRepository, IMapper mapper,
-                              IUserValidator<User> userValidator,
+        public AccountService(IAccountRepository accountRepository, 
+                              IUserService userService,
+                              IMapper mapper,
                               IValidator<UserRegisterDTO> registerDTOValidator,
+                              IOptions<JWTSettings> JWTSettings,
                               ResponseResult responseHandler){
             _accountRepository = accountRepository;
+            _userService = userService;
             _mapper = mapper;
-            _userValidator = userValidator;
             _registerDTOValidator = registerDTOValidator;
+            _JWTSettings = JWTSettings.Value;
             this.responseHandler = responseHandler;
         }
 
-        public async Task CreateAsync(UserRegisterDTO userDto){
+        public async Task SignUpAsync(UserRegisterDTO userDto){
 
             #region DTO Validation
             
@@ -55,15 +64,15 @@ namespace API.Services.Entities
 
             var user = _mapper.Map<User>(userDto);
 
-            var isEmailAvailable = await IsEmailAvailable(user.Email);
+            var isEmailAvailable = await _userService.IsEmailAvailable(user.Email);
             if (!isEmailAvailable) 
                 return;
 
-            var isUsernameAvailable = await IsUsernameAvailable(user.UserName);
+            var isUsernameAvailable = await _userService.IsUsernameAvailable(user.UserName);
             if (!isUsernameAvailable)
                 return;
         
-            var userValidationResult = await _accountRepository.ValidateAsync(_userValidator, user);
+            var userValidationResult = await _userService.ValidateAsync(user);
 
             if (!userValidationResult.Succeeded){
                 responseHandler.Errors = ResponseErrors.getIdentityResultErrors(userValidationResult);
@@ -75,49 +84,46 @@ namespace API.Services.Entities
 
             #region User Registration
             
-            await _accountRepository.CreateAsync(user, userDto.Password);
-            await _accountRepository.PutInStudentRoleAsync(user);
+            await _accountRepository.SignUpAsync(user, userDto.Password);
+            await _userService.AddToRoleAsync(user, "STUDENT");
 
             #endregion
             
         }
 
-        public async Task<bool> IsEmailAvailable(string email){
-            var isEmailAvailable = (await _accountRepository.FindByEmailAsync(email)) == null;
-            
-            if (!isEmailAvailable)
-                responseHandler.AddError("Endereço de e-mail já cadastrado!", ErrorType.NOT_AVAILABLE);
-                        
-            return isEmailAvailable;
-        }
+        public async Task SignInAsync(UserLoginDTO user){
 
-        public async Task<bool> IsUsernameAvailable(string username){
-            var isUsernameAvailable = (await _accountRepository.FindByUsernameAsync(username)) == null ;
-            
-            if (!isUsernameAvailable)
-                responseHandler.AddError("Username já cadastrado!", ErrorType.NOT_AVAILABLE);
-
-            return isUsernameAvailable;
-        }
-
-        public async Task DeleteAsync(string username){
-           
-           var user = await _accountRepository.FindByUsernameAsync(username);
-
-           if(user == null){
-                responseHandler.AddError($"Não encontrado usuário com o username {username}", ErrorType.ENTITY_NOT_FOUND);
-                return;
-            }
-
-            await _accountRepository.DeleteAsync(user);
-        }
-
-        public Task<User> EditAsync(Guid id){
             throw new NotImplementedException();
+
         }
 
-        public IQueryable<User> List(){
+        public async Task SignOutAsync(){
+
             throw new NotImplementedException();
+
+        }
+
+
+        public async Task<string> GenerateToken(string email){
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_JWTSettings.Secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor {
+                Issuer = _JWTSettings.Issuer,
+                Audience = _JWTSettings.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(_JWTSettings.Expires_In),
+                SigningCredentials = new SigningCredentials(
+                    key: new SymmetricSecurityKey(key),
+                    algorithm: SecurityAlgorithms.HmacSha256Signature 
+                )
+            };
+
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+
+            var token = tokenHandler.WriteToken(securityToken);
+
+            return token;
         }
     }
 }

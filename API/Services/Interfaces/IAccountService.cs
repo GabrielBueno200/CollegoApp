@@ -9,13 +9,10 @@ namespace API.Services.Interfaces
 {
     public interface IAccountService {
 
-        Task CreateAsync(UserRegisterDTO user);
+        Task SignUpAsync(UserRegisterDTO user);
 
-        Task DeleteAsync(string username);
-        
-        Task<User> EditAsync(Guid id);
+        Task SignInAsync(UserLoginDTO user);
 
-        IQueryable<User> List();
-         
+        Task SignOutAsync();    
     }
 }

@@ -13,7 +13,14 @@ namespace Domain.Validators
             RuleFor(x => x.FullName).NotNull().WithMessage(ErrorsConstants.FORGOT_FIELD);
             RuleFor(x => x.TermsAccepted).NotNull().Must((x, value, ctx) => value).WithMessage(ErrorsConstants.TERMS_NOT_ACCEPTED);
         }
+    }
 
-        
+    public class UserLoginDTOValidator : AbstractValidator<UserLoginDTO>{
+
+        public UserLoginDTOValidator(){
+
+            RuleFor(x => x.Email).EmailAddress().NotNull();
+            RuleFor(x => x.Password).NotNull().WithMessage(ErrorsConstants.FORGOT_FIELD);
+        }
     }
 }

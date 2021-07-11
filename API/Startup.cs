@@ -1,3 +1,4 @@
+using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using API.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API
 {
@@ -58,7 +63,19 @@ namespace API
                     options.Password.RequireUppercase = false;
                     options.Password.RequireDigit = false;
             })
-            .AddEntityFrameworkStores<DataContext>();
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => {
+                options.Events.OnRedirectToLogin = ctx => { 
+                    ctx.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+                options.Events.OnRedirectToAccessDenied = ctx => {
+                    ctx.Response.StatusCode = 403;
+                    return Task.CompletedTask;
+                };
+            });
 
             #endregion
 
@@ -66,26 +83,32 @@ namespace API
 
             services.AddValidatorsFromAssemblyContaining<UserRegisterDTOValidator>();
 
-
             #endregion
 
-            #region Repositories DI
-            
-            services.AddScoped<IAccountRepository, AccountRepository>();
+            #region Dependency Injection
 
-            #endregion
+                #region Repositories 
+                
+                services.AddScoped<IUserRepository, UserRepository>();
+                services.AddScoped<IAccountRepository, AccountRepository>();
+                services.AddScoped<IProfileRepository, ProfileRepository>();
 
-            #region ServicesDI
-            
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<ResponseResult>();
+                #endregion
 
-            #endregion
+                #region Services
+                
+                services.AddScoped<IAccountService, AccountService>();
+                services.AddScoped<IProfileService, ProfileService>();
+                services.AddScoped<ResponseResult>();
 
-            #region AutoMapper DI
-            
-            services.AddAutoMapper(typeof(UserProfile).Assembly);
-            
+                #endregion
+
+                #region AutoMapper 
+                
+                services.AddAutoMapper(typeof(UserProfile).Assembly);
+                
+                #endregion
+
             #endregion
 
             #region CorsConfigs
@@ -101,6 +124,41 @@ namespace API
 
             #endregion
 
+            #region JTWConfigs
+
+            var JWTSettingsSection = Configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(JWTSettingsSection);
+
+            var JWTSettings = JWTSettingsSection.Get<JWTSettings>();
+            var key = Encoding.ASCII.GetBytes(JWTSettings.Secret);
+
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateAudience = true,
+                    ValidAudience = JWTSettings.Audience,
+                    ValidIssuer = JWTSettings.Issuer
+                };
+            });
+
+            services.AddAuthorization(options => {
+                options.AddPolicy(
+                    "Bearer", 
+                     new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build()
+                );
+            });
+
+            #endregion
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Collego API", Version = "v1" });
@@ -110,8 +168,7 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
@@ -125,8 +182,7 @@ namespace API
 
             app.UseCors("CorsPolicy");
 
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
         }

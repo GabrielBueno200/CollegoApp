@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Linq;
 using Domain.Models;
@@ -13,29 +14,27 @@ using Microsoft.AspNetCore.Authorization;
 namespace API.Controllers
 {
     [ApiController]
-    //[Authorize]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class AccountController : ControllerBase {
 
-        private readonly IAccountService _service;
+        private readonly IAccountService _accountService;
 
         private readonly IMapper _mapper;
 
         private readonly ResponseResult responseHandler;
 
-        public AccountController(IAccountService service, ResponseResult responseHandler, IMapper mapper){
-            _service = service;
+        public AccountController(IAccountService accountService, ResponseResult responseHandler, IMapper mapper){
+            _accountService = accountService;
             _mapper = mapper;
             this.responseHandler = responseHandler;
         }
 
         [HttpPost]
         [Route("create")]
-        //[AllowAnonymous]
-        public async Task<IActionResult> CreateAsync([FromBody] UserRegisterDTO userDto){
+        public async Task<IActionResult> SingUpAsync([FromBody] UserRegisterDTO userDto){
 
-            await _service.CreateAsync(userDto);
+            await _accountService.SignUpAsync(userDto);
 
             if (responseHandler.HasErrors){
 
@@ -52,24 +51,9 @@ namespace API.Controllers
             return Ok(userViewModel);
         }
 
-        [HttpDelete]
-        [Route("delete/{username}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] string username){
-            
-            await _service.DeleteAsync(username);
+        public async Task<IActionResult> SignInAsync([FromBody] UserLoginDTO userDto){
+            throw new NotImplementedException();
+        }
 
-            if (responseHandler.HasErrors){
-
-                var errors = responseHandler.JsonErrors;
-
-                if(responseHandler.ErrorFromType(ErrorType.ENTITY_NOT_FOUND) != null)
-                    return NotFound(errors);
-
-                return BadRequest(errors);
-            }
-
-            return Ok(new { message = $"{username}, a sua conta foi deletada com sucesso" } );
-
-        } 
     }
 }

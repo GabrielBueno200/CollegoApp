@@ -13,13 +13,12 @@ namespace API.Utils
 
         public List<ResponseErrors> Errors { get; set; } = new List<ResponseErrors>();
 
-        public bool HasErrors  { get { return Errors.Count > 0;} }
+        public bool HasErrors  { get { return Errors.Count > 0; } }
         
         public string ErrorFromType(ErrorType type) => Errors.Where(x => x.Type == type).FirstOrDefault()?.Message;
 
-        public void AddError(string name, ErrorType type){
-            ResponseErrors.AddError(Errors, name, type);
-        }
+        public void AddError(string name, ErrorType type) => ResponseErrors.AddError(Errors, name, type);
+
         public object JsonErrors { get {
 
             dynamic errorsByTypeObject = new ExpandoObject();

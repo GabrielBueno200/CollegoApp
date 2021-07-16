@@ -51,8 +51,26 @@ namespace API.Controllers
             return Ok(userViewModel);
         }
 
+        [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> SignInAsync([FromBody] UserLoginDTO userDto){
-            throw new NotImplementedException();
+            
+            var result = await _accountService.SignInAsync(userDto);
+
+            if (responseHandler.HasErrors){
+
+                var errors = responseHandler.JsonErrors;
+
+                if(responseHandler.ErrorFromType(ErrorType.ENTITY_NOT_FOUND) != null)
+                    return NotFound(errors);
+
+                if(responseHandler.ErrorFromType(ErrorType.UNPROCESSABLE) != null)
+                    return UnprocessableEntity(errors);
+
+                return BadRequest(errors);
+            }
+
+            return Ok(result);
         }
 
     }

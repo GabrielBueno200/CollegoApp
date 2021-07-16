@@ -11,10 +11,16 @@ namespace API.Repositories.Entities
 
         private readonly IUserRepository _userRepository;
 
-        public AccountRepository(IUserRepository userRepository){
+        private readonly SignInManager<User> _signInManager;
+
+        public AccountRepository(IUserRepository userRepository, SignInManager<User> signInManager){
             _userRepository = userRepository;
+            _signInManager = signInManager;
         }
 
         public async Task SignUpAsync(User user, string password) => await _userRepository.CreateAsync(user, password);
+    
+        public async Task<SignInResult> SignInAsync(User user, string password) => await _signInManager.PasswordSignInAsync(user, password, false, true);
+    
     }
 }

@@ -15,8 +15,11 @@ namespace API.Services.Entities
         
         private readonly ResponseResult responseHandler;
 
-        public UserService(IUserRepository userRepository, ResponseResult responseHandler){
+        public UserService(IUserRepository userRepository, 
+                            ResponseResult responseHandler,
+                            IUserValidator<User> userValidator){
             _userRepository = userRepository;
+            _userValidator = userValidator;
             this.responseHandler = responseHandler;
         }
 
@@ -40,5 +43,9 @@ namespace API.Services.Entities
         public async Task AddToRoleAsync(User user, string roleName) => await _userRepository.AddToRoleAsync(user, roleName); 
         
         public async Task<IdentityResult> ValidateAsync(User user) => await _userRepository.ValidateAsync(_userValidator, user);
+
+        public async Task<User> FindByUsernameAsync(string username) => await _userRepository.FindByUsernameAsync(username);
+    
+        public async Task<User> FindByEmailAsync(string username) => await _userRepository.FindByEmailAsync(username);
     }
 }

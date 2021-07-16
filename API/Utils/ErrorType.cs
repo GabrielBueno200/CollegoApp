@@ -4,6 +4,6 @@ namespace API.Utils
         ENTITY_NOT_FOUND,
         VALIDATION_ERROR,
         NOT_AVAILABLE,
-        
+        UNPROCESSABLE
     }
 }

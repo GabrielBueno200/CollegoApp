@@ -19,7 +19,7 @@ namespace Domain.Validators
 
         public UserLoginDTOValidator(){
 
-            RuleFor(x => x.Email).EmailAddress().NotNull();
+            RuleFor(x => x.Email).EmailAddress().Must((x, value, ctx) => x.Username == null || (value == null && x.Username != null)).WithMessage("Insira e-mail ou username (não ambos)!");
             RuleFor(x => x.Password).NotNull().WithMessage(ErrorsConstants.FORGOT_FIELD);
         }
     }

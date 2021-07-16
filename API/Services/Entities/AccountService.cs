@@ -11,10 +11,7 @@ using AutoMapper;
 using Domain.Models;
 using Domain.DTOs;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
+using Domain.ViewModels;
 
 namespace API.Services.Entities
 {
@@ -23,12 +20,14 @@ namespace API.Services.Entities
         private readonly IAccountRepository _accountRepository;
 
         private readonly IUserService _userService;
+
+        private readonly IJwtService _jwtService;
         
         private readonly IMapper _mapper;
 
         private readonly IValidator<UserRegisterDTO> _registerDTOValidator;
-
-        private readonly JWTSettings _JWTSettings;
+        
+        private readonly IValidator<UserLoginDTO> _loginDTOValidator;
 
         private readonly ResponseResult responseHandler;
 
@@ -36,13 +35,15 @@ namespace API.Services.Entities
                               IUserService userService,
                               IMapper mapper,
                               IValidator<UserRegisterDTO> registerDTOValidator,
-                              IOptions<JWTSettings> JWTSettings,
+                              IValidator<UserLoginDTO> loginDTOValidator,
+                              IJwtService jwtService,
                               ResponseResult responseHandler){
             _accountRepository = accountRepository;
             _userService = userService;
+            _jwtService = jwtService;
             _mapper = mapper;
+            _loginDTOValidator = loginDTOValidator;
             _registerDTOValidator = registerDTOValidator;
-            _JWTSettings = JWTSettings.Value;
             this.responseHandler = responseHandler;
         }
 
@@ -91,9 +92,46 @@ namespace API.Services.Entities
             
         }
 
-        public async Task SignInAsync(UserLoginDTO user){
+        public async Task<object> SignInAsync(UserLoginDTO userDto){
 
-            throw new NotImplementedException();
+            #region DTO Validation
+            
+            var dtoValidationResult = await _loginDTOValidator.ValidateAsync(userDto);
+
+            if (!dtoValidationResult.IsValid) {
+                responseHandler.Errors = ResponseErrors.getResultErrors(dtoValidationResult);
+                return null;
+            }
+            
+            #endregion
+
+            #region Login validation
+
+            
+            var user = userDto.Email != null ? await _userService.FindByEmailAsync(userDto.Email)
+                     : userDto.Username != null ? await _userService.FindByUsernameAsync(userDto.Username) : null;
+
+            if (user == null){
+                responseHandler.AddError($"Não encontrado usuário cadastrado com o username/e-mail informado!", ErrorType.ENTITY_NOT_FOUND);
+                return null;
+            }
+
+            #endregion
+
+            var token = _jwtService.GenerateToken(user);
+
+            var result = await _accountRepository.SignInAsync(user, userDto.Password);
+
+            if(!result.Succeeded){
+                responseHandler.AddError("E-mail ou senha incorreto!", ErrorType.UNPROCESSABLE);
+                return null;
+            }
+
+            return new {
+                token = token,
+                user = _mapper.Map<UserViewModel>(user)
+            };
+
 
         }
 
@@ -103,27 +141,5 @@ namespace API.Services.Entities
 
         }
 
-
-        public async Task<string> GenerateToken(string email){
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_JWTSettings.Secret);
-
-            var tokenDescriptor = new SecurityTokenDescriptor {
-                Issuer = _JWTSettings.Issuer,
-                Audience = _JWTSettings.Audience,
-                Expires = DateTime.UtcNow.AddMinutes(_JWTSettings.Expires_In),
-                SigningCredentials = new SigningCredentials(
-                    key: new SymmetricSecurityKey(key),
-                    algorithm: SecurityAlgorithms.HmacSha256Signature 
-                )
-            };
-
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-
-            var token = tokenHandler.WriteToken(securityToken);
-
-            return token;
-        }
     }
 }

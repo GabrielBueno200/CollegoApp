@@ -15,7 +15,7 @@ namespace API.Utils
 
         public bool HasErrors  { get { return Errors.Count > 0; } }
         
-        public string ErrorFromType(ErrorType type) => Errors.Where(x => x.Type == type).FirstOrDefault()?.Message;
+        public string ErrorFromType(ErrorType type) => Errors.Where(x => x.Type == type).FirstOrDefault()?.Message ?? null;
 
         public void AddError(string name, ErrorType type) => ResponseErrors.AddError(Errors, name, type);
 

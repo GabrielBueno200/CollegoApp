@@ -11,7 +11,7 @@ namespace API.Services.Interfaces
 
         Task SignUpAsync(UserRegisterDTO user);
 
-        Task SignInAsync(UserLoginDTO user);
+        Task<object> SignInAsync(UserLoginDTO user);
 
         Task SignOutAsync();    
     }

@@ -13,6 +13,10 @@ namespace API.Services.Interfaces
         Task<bool> IsEmailAvailable(string email);
 
         Task<bool> IsUsernameAvailable(string username);
+
+        Task<User> FindByUsernameAsync(string username);
+
+        Task<User> FindByEmailAsync(string username);
         
     }
 }

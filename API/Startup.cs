@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using API.Settings;
+using Application.Settings;
+using Infrastructure.Settings;
+
+//API Project: Presentation Layer
 
 namespace API
 {

@@ -1,4 +1,4 @@
-using Domain.Configurations.AutoMapper;
+using API.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Settings

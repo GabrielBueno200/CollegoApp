@@ -1,14 +1,15 @@
+using System.Net.Mime;
 using System;
 using System.Net;
 using System.Linq;
 using Domain.Models;
-using Domain.DTOs;
-using API.Utils;
+using Application.DTOs;
+using Application.Utils;
 using System.Threading.Tasks;
-using API.Services.Interfaces;
+using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Domain.ViewModels;
+using API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers

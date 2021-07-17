@@ -1,13 +1,12 @@
-using System.Net.Mime;
 using System;
 using System.Threading.Tasks;
 using Domain.Repositories.Interfaces;
 using Application.Services.Interfaces;
-using Application.Utils;
 using AutoMapper;
 using Domain.Models;
-using Application.DTOs;
+using Application.Core.DTOs;
 using FluentValidation;
+using Application.Core.Notifications;
 
 namespace Application.Services.Entities
 {
@@ -25,7 +24,7 @@ namespace Application.Services.Entities
         
         private readonly IValidator<UserLoginDTO> _loginDTOValidator;
 
-        private readonly ResponseResult responseHandler;
+        private readonly NotificationsContext notificationsHandler;
 
         public AccountService(IAccountRepository accountRepository, 
                               IUserService userService,
@@ -33,14 +32,14 @@ namespace Application.Services.Entities
                               IValidator<UserRegisterDTO> registerDTOValidator,
                               IValidator<UserLoginDTO> loginDTOValidator,
                               ITokenGeneratorService tokenGeneratorService,
-                              ResponseResult responseHandler){
+                              NotificationsContext notificationsHandler){
             _accountRepository = accountRepository;
             _userService = userService;
             _tokenGeneratorService = tokenGeneratorService;
             _mapper = mapper;
             _loginDTOValidator = loginDTOValidator;
             _registerDTOValidator = registerDTOValidator;
-            this.responseHandler = responseHandler;
+            this.notificationsHandler = notificationsHandler;
         }
 
         public async Task SignUpAsync(UserRegisterDTO userDto){
@@ -50,7 +49,7 @@ namespace Application.Services.Entities
             var dtoValidationResult = await _registerDTOValidator.ValidateAsync(userDto);
 
             if (!dtoValidationResult.IsValid) {
-                responseHandler.Errors = ResponseErrors.getResultErrors(dtoValidationResult);
+                notificationsHandler.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
                 return;
             }
             
@@ -72,7 +71,8 @@ namespace Application.Services.Entities
             var userValidationResult = await _userService.ValidateAsync(user);
 
             if (!userValidationResult.Succeeded){
-                responseHandler.Errors = ResponseErrors.getIdentityResultErrors(userValidationResult);
+                notificationsHandler.Notifications = 
+                    ResponseNotifications.getIdentityResultErrors(userValidationResult);
                 return;
             }
 
@@ -95,7 +95,7 @@ namespace Application.Services.Entities
             var dtoValidationResult = await _loginDTOValidator.ValidateAsync(userDto);
 
             if (!dtoValidationResult.IsValid) {
-                responseHandler.Errors = ResponseErrors.getResultErrors(dtoValidationResult);
+                notificationsHandler.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
                 return null;
             }
             
@@ -108,7 +108,7 @@ namespace Application.Services.Entities
                      : userDto.Username != null ? await _userService.FindByUsernameAsync(userDto.Username) : null;
 
             if (user == null){
-                responseHandler.AddError($"Não encontrado usuário cadastrado com o username/e-mail informado!", ErrorType.ENTITY_NOT_FOUND);
+                notificationsHandler.AddNotification($"Não encontrado usuário cadastrado com o username/e-mail informado!", NotificationType.ENTITY_NOT_FOUND);
                 return null;
             }
 
@@ -119,7 +119,7 @@ namespace Application.Services.Entities
             var result = await _accountRepository.SignInAsync(user, userDto.Password);
 
             if(!result.Succeeded){
-                responseHandler.AddError("E-mail ou senha incorreto!", ErrorType.UNPROCESSABLE);
+                notificationsHandler.AddNotification("E-mail ou senha incorreto!", NotificationType.UNPROCESSABLE);
                 return null;
             }
 

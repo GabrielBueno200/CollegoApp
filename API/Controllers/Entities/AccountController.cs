@@ -3,13 +3,13 @@ using System;
 using System.Net;
 using System.Linq;
 using Domain.Models;
-using Application.DTOs;
-using Application.Utils;
 using System.Threading.Tasks;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using API.ViewModels;
+using Application.Core.DTOs;
+using Application.Core.Notifications;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
@@ -17,18 +17,21 @@ namespace API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [AllowAnonymous]
     public class AccountController : ControllerBase {
 
         private readonly IAccountService _accountService;
 
         private readonly IMapper _mapper;
 
-        private readonly ResponseResult responseHandler;
+        private readonly NotificationsContext notificationsContext;
 
-        public AccountController(IAccountService accountService, ResponseResult responseHandler, IMapper mapper){
+        public AccountController(IAccountService accountService, 
+                                 NotificationsContext notificationsContext, 
+                                IMapper mapper){
             _accountService = accountService;
             _mapper = mapper;
-            this.responseHandler = responseHandler;
+            this.notificationsContext = notificationsContext;
         }
 
         [HttpPost]
@@ -37,11 +40,11 @@ namespace API.Controllers
 
             await _accountService.SignUpAsync(userDto);
 
-            if (responseHandler.HasErrors){
+            if (notificationsContext.HasNotifications){
 
-                var errors = responseHandler.JsonErrors;
+                var errors = notificationsContext.JsonNotifications;
 
-                if(responseHandler.ErrorFromType(ErrorType.NOT_AVAILABLE) != null)
+                if(notificationsContext.NotificationFromType(NotificationType.NOT_AVAILABLE) != null)
                     return Conflict(errors);
 
                 return BadRequest(errors);
@@ -58,14 +61,14 @@ namespace API.Controllers
             
             var result = await _accountService.SignInAsync(userDto);
 
-            if (responseHandler.HasErrors){
+            if (notificationsContext.HasNotifications){
 
-                var errors = responseHandler.JsonErrors;
+                var errors = notificationsContext.JsonNotifications;
 
-                if(responseHandler.ErrorFromType(ErrorType.ENTITY_NOT_FOUND) != null)
+                if(notificationsContext.NotificationFromType(NotificationType.ENTITY_NOT_FOUND) != null)
                     return NotFound(errors);
 
-                if(responseHandler.ErrorFromType(ErrorType.UNPROCESSABLE) != null)
+                if(notificationsContext.NotificationFromType(NotificationType.UNPROCESSABLE) != null)
                     return UnprocessableEntity(errors);
 
                 return BadRequest(errors);

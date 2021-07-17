@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+using System.Buffers;
 using System.Threading.Tasks;
 using System.Net;
 using System.Text;
@@ -10,10 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Application.Security.Entities;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
-namespace Application.Settings
+namespace API.Settings
 {
-
 
     public static class JWTSettings
     {
@@ -27,6 +29,14 @@ namespace Application.Settings
 
             var JWTSettings = JWTSettingsSection.Get<TokenPayload>();
             var key = Encoding.ASCII.GetBytes(JWTSettings.Secret);
+
+            services.AddControllers(options => {
+                var policy = 
+                    new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.AddAuthentication(options =>
             {
@@ -54,12 +64,13 @@ namespace Application.Settings
 
                 options.Events = new JwtBearerEvents()
                 {
+                    
                     OnAuthenticationFailed = ctx =>
                     {
 
                         ctx.NoResult();
                         ctx.Response.ContentType = "application/json";
-                        ctx.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        ctx.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
 
                         string errorMessage = "An error has ocurred during your authentication proccess";
@@ -68,6 +79,28 @@ namespace Application.Settings
                                 Environment.IsDevelopment()
                                 ? new { message = errorMessage, exception = ctx.Exception.ToString() }
                                 : new { message = errorMessage };
+
+                        var responseContent =
+                            Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));
+
+
+                        ctx.Response.Body.WriteAsync(responseContent).GetAwaiter();
+
+                        return Task.CompletedTask;
+
+                    },
+
+                    OnForbidden = ctx =>
+                    {
+
+                        ctx.NoResult();
+                        ctx.Response.ContentType = "application/json";
+                        ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+
+
+                        string errorMessage = "You are not allowed to execute this";
+
+                        object jsonObject = new { message = errorMessage };
 
                         var responseContent =
                             Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));

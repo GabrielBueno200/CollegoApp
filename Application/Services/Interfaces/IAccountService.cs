@@ -2,9 +2,7 @@ using System.Net.Mime;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Utils;
-using Domain.Models;
-using Application.DTOs;
+using Application.Core.DTOs;
 
 namespace Application.Services.Interfaces
 {

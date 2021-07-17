@@ -1,4 +1,4 @@
-namespace Application.DTOs
+namespace Application.Core.DTOs
 {
     public class UserRegisterDTO{
 

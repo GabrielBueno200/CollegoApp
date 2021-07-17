@@ -2,7 +2,7 @@ using Domain.Repositories.Interfaces;
 using Infrastructure.Repositories.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Settings
+namespace API.Settings
 {
     public static class RepositoriesSettings{
 

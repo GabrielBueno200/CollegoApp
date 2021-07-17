@@ -1,9 +1,14 @@
-namespace Application.Utils
+namespace Application.Core.Notifications
 {
-    public enum ErrorType{
+    public enum NotificationType{
+        
         ENTITY_NOT_FOUND,
+
         VALIDATION_ERROR,
+
         NOT_AVAILABLE,
+
         UNPROCESSABLE
+
     }
 }

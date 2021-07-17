@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Settings
+namespace API.Settings
 {
     public static class DatabaseSettings {
 
@@ -26,17 +25,6 @@ namespace Infrastructure.Settings
             })
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();
-
-            services.ConfigureApplicationCookie(options => {
-                options.Events.OnRedirectToLogin = ctx => { 
-                    ctx.Response.StatusCode = 401;
-                    return Task.CompletedTask;
-                };
-                options.Events.OnRedirectToAccessDenied = ctx => {
-                    ctx.Response.StatusCode = 403;
-                    return Task.CompletedTask;
-                };
-            });
 
         }
         

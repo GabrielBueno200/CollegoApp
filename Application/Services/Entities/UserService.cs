@@ -2,9 +2,9 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Domain.Repositories.Interfaces;
 using Application.Services.Interfaces;
-using Application.Utils;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Application.Core.Notifications;
 
 namespace Application.Services.Entities
 {
@@ -14,21 +14,21 @@ namespace Application.Services.Entities
         
         private readonly IUserValidator<User> _userValidator;
         
-        private readonly ResponseResult responseHandler;
+        private readonly NotificationsContext notificationsHandler;
 
         public UserService(IUserRepository userRepository, 
-                            ResponseResult responseHandler,
+                            NotificationsContext notificationsHandler,
                             IUserValidator<User> userValidator){
             _userRepository = userRepository;
             _userValidator = userValidator;
-            this.responseHandler = responseHandler;
+            this.notificationsHandler = notificationsHandler;
         }
 
         public async Task<bool> IsEmailAvailable(string email){
             var isEmailAvailable = (await _userRepository.FindByEmailAsync(email)) == null;
             
             if (!isEmailAvailable)
-                responseHandler.AddError("Endereço de e-mail já cadastrado!", ErrorType.NOT_AVAILABLE);
+                notificationsHandler.AddNotification("Endereço de e-mail já cadastrado!", NotificationType.NOT_AVAILABLE);
                         
             return isEmailAvailable;
         }
@@ -36,7 +36,7 @@ namespace Application.Services.Entities
             var isUsernameAvailable = (await _userRepository.FindByUsernameAsync(username)) == null ;
             
             if (!isUsernameAvailable)
-                responseHandler.AddError("Username já cadastrado!", ErrorType.NOT_AVAILABLE);
+                notificationsHandler.AddNotification("Username já cadastrado!", NotificationType.NOT_AVAILABLE);
 
             return isUsernameAvailable;
         }

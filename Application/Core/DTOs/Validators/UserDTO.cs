@@ -1,8 +1,8 @@
-using Application.DTOs;
-using Application.Constants;
+using Application.Core.DTOs;
+using Application.Notifications.Constants;
 using FluentValidation;
 
-namespace Application.Validators
+namespace Application.Core.DTOs.Validators
 {
     public class UserRegisterDTOValidator : AbstractValidator<UserRegisterDTO>{
         

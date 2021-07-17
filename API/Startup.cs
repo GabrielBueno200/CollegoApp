@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using API.Settings;
-using Application.Settings;
-using Infrastructure.Settings;
 
 //API Project: Presentation Layer
 
@@ -29,7 +27,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddJWTSettings(Configuration, Environment);
 
             services.AddDatabaseSettings(Configuration);
 
@@ -42,8 +40,6 @@ namespace API
             services.AddFluentValidationSettings();
 
             services.AddCorsSettings();
-
-            services.AddJWTSettings(Configuration, Environment);
 
             services.AddSwaggerSettings();
 

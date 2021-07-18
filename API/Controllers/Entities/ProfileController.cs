@@ -36,7 +36,9 @@ namespace API.Controllers.Entities
         [Route("logout")]
         public async Task<IActionResult> SignOutAsync(TokenDTO token){
             
-            await _profileservice.SignOutAsync(token.RefreshToken);
+            var userName = User.FindFirstValue(claimType: ClaimTypes.Name);
+
+            await _profileservice.SignOutAsync(token.RefreshToken, userName);
 
             if (_notificationsContext.HasNotifications){
                 

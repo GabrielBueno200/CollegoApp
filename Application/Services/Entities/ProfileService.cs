@@ -59,12 +59,19 @@ namespace Application.Services.Entities
             throw new NotImplementedException();
         }
 
-        public async Task SignOutAsync(string token){
+        public async Task SignOutAsync(string token, string username){
 
             var requestedToken = await _tokenRepository.FindByTokenAsync(token);
 
             if (requestedToken == null){
                 _notificationsContext.AddNotification("O refresh token informado não existe!", NotificationType.TOKEN_ERROR);
+                return;
+            }
+
+            var user = await _userRepository.FindByUsernameAsync(username);
+
+            if (requestedToken.UserId != user.Id){
+                _notificationsContext.AddNotification("O token informado não pertence ao usuário logado!", NotificationType.TOKEN_ERROR);
                 return;
             }
 

@@ -22,6 +22,8 @@ namespace Infrastructure.Repositories.Entities
 
         public async Task<User> FindByUsernameAsync(string username) => await _userManager.FindByNameAsync(username);
 
+        public async Task<User> FindByIdAsync(string id) => await _userManager.FindByIdAsync(id);
+
         public async Task<IdentityResult> ValidateAsync(IUserValidator<User> validator, User user) => await validator.ValidateAsync(_userManager, user); 
         
         public async Task<IdentityResult> AddToRoleAsync(User user, string roleName) => await _userManager.AddToRoleAsync(user, roleName);

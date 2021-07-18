@@ -15,6 +15,8 @@ namespace Domain.Repositories.Interfaces
 
         Task<User> FindByUsernameAsync(string username);
 
+        Task<User> FindByIdAsync(string id);
+
         Task<IdentityResult> ValidateAsync(IUserValidator<User> validator, User user);
 
         IQueryable<User> List();

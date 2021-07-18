@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Application.Security.Entities;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using API.Security.Extensions.Customs;
 
 namespace API.Security.Extensions
 {
@@ -64,91 +65,17 @@ namespace API.Security.Extensions
                 options.SaveToken = true;
                 options.TokenValidationParameters = JwtValidationParams;
 
-
                 options.Events = new JwtBearerEvents() {
                     
-                    OnAuthenticationFailed = ctx => {
+                    OnAuthenticationFailed = ctx => ctx.HandleAuthenticationError(Environment),
 
-                        ctx.NoResult();
-                        ctx.Response.ContentType = "application/json";
-                        ctx.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    OnChallenge = ctx => ctx.HandleUnauthorizedError(),
 
-
-                        string errorMessage = "Algum erro ocorreu durante o seu processo de autenticação!";
-
-                        object jsonObject =
-                                Environment.IsDevelopment()
-                                ? new { message = errorMessage, exception = ctx.Exception.ToString() }
-                                : new { message = errorMessage };
-
-                        var responseContent =
-                            Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));
-
-
-                        ctx.Response.Body.WriteAsync(responseContent).GetAwaiter();
-
-                        return Task.CompletedTask;
-
-                    },
-
-                    OnChallenge = ctx => {
-
-                        if (!ctx.Response.HasStarted){
-
-                            ctx.Response.ContentType = "application/json";
-
-                            ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
-
-                            string errorMessage = "Você não está autorizado!";
-
-                            object jsonObject = new { message = errorMessage };
-
-                            var responseContent =
-                                Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));
-
-                            ctx.Response.Body.WriteAsync(responseContent).GetAwaiter();
-
-                        }
-
-                        return Task.CompletedTask;
-
-                    },
-
-                    OnForbidden = ctx => {
-
-                        ctx.NoResult();
-                        ctx.Response.ContentType = "application/json";
-                        ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
-
-
-                        string errorMessage = "Não permitido!";
-
-                        object jsonObject = new { message = errorMessage };
-
-                        var responseContent =
-                            Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));
-
-
-                        ctx.Response.Body.WriteAsync(responseContent).GetAwaiter();
-
-                        return Task.CompletedTask;
-
-                    },
+                    OnForbidden = ctx => ctx.HandleForbbidenError()
 
                 };
 
             });
-
-            services.AddAuthorization(options => {
-                
-                options.AddPolicy(
-                    "Bearer",
-                     new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build()
-                );
-            });
-
         }
 
     }

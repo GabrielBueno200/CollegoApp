@@ -70,15 +70,20 @@ namespace Application.Security.Services.Entities
                 return null;
             }
 
+            var userAccessTokenId = validatedToken.FindFirstValue(claimType: JwtRegisteredClaimNames.Sub);
+
+            if (DbStoredRFToken.UserId != userAccessTokenId){
+                _notificationsContext.AddNotification("Os tokens informados não pertencem ao mesmo usuário!", NotificationType.TOKEN_ERROR);
+                return null;
+            }
+
             # endregion
 
             # region Refresh Token Register
 
             await _tokenRepository.DeleteAsync(DbStoredRFToken.Token);
 
-            var userName = validatedToken.FindFirstValue(claimType: JwtRegisteredClaimNames.UniqueName);
-
-            var user = await _userRepository.FindByUsernameAsync(userName);
+            var user = await _userRepository.FindByIdAsync(DbStoredRFToken.UserId);
 
             return await _tokenGeneratorService.GenerateTokenAsync(user);
 

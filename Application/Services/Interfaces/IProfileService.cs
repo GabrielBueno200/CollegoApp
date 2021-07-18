@@ -16,7 +16,7 @@ namespace Application.Services.Interfaces
         
         IQueryable<User> List();
 
-        Task SignOutAsync(string token);
+        Task SignOutAsync(string token, string username);
          
     }
 }

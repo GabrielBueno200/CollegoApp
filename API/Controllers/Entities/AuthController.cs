@@ -3,6 +3,7 @@ using Application.Core.DTOs.Entities;
 using System.Threading.Tasks;
 using Application.Security.Services.Interfaces;
 using Application.Core.Notifications;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers.Entities
 {
@@ -21,6 +22,7 @@ namespace API.Controllers.Entities
 
         [HttpPost]
         [Route("refreshToken")]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshTokenAsync([FromBody] TokenDTO tokenDTO){
         
             var authResult = await _tokenService.RefreshTokenAsync(tokenDTO.Token, tokenDTO.RefreshToken);

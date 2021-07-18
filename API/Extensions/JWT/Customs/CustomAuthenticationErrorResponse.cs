@@ -17,15 +17,16 @@ namespace API.Security.Extensions.Customs
 
             ctx.NoResult();
             ctx.Response.ContentType = "application/json";
-            ctx.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-
-
+            
             string errorMessage;
-
-            if (ctx.Exception != null && ctx.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                
+            if (ctx.Exception != null && ctx.Exception.GetType() == typeof(SecurityTokenExpiredException)){
+                ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                 errorMessage = "Seu token de autenticação já expirou, faça o processo de login novamente!";
-            else
+            } else {
+                ctx.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 errorMessage = "Algum erro ocorreu durante o seu processo de autenticação!";
+            }
 
             object jsonObject =
                     Environment.IsDevelopment()

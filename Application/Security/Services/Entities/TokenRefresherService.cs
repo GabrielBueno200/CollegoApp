@@ -115,7 +115,6 @@ namespace Application.Security.Services.Entities
 
         private bool IsUsingValidAlgorithmSecurity(JwtSecurityToken securityToken){
 
-
             var tokenAlgorithm = securityToken.Header.Alg;
             
             return tokenAlgorithm.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);

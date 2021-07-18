@@ -4,6 +4,7 @@ using Application.Core.Notifications;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers.Entities
 {
@@ -24,7 +25,7 @@ namespace API.Controllers.Entities
         [Route("current")]
         public async Task<IActionResult> GetCurrentUserAsync(){
 
-            var userName = User.FindFirstValue(claimType: ClaimTypes.Name); 
+            var userName = User.FindFirstValue(JwtRegisteredClaimNames.UniqueName); 
 
             var user = await _profileservice.GetCurrentUserAsync(userName);
 
@@ -36,7 +37,7 @@ namespace API.Controllers.Entities
         [Route("logout")]
         public async Task<IActionResult> SignOutAsync(TokenDTO token){
             
-            var userName = User.FindFirstValue(claimType: ClaimTypes.Name);
+            var userName = User.FindFirstValue(claimType: JwtRegisteredClaimNames.UniqueName);
 
             await _profileservice.SignOutAsync(token.RefreshToken, userName);
 

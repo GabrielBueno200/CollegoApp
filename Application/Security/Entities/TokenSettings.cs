@@ -6,7 +6,7 @@ namespace Application.Security.Entities
 
         public string Audience { get; set; }
 
-        public int Expires_In { get; set; }
+        public double Expires_In { get; set; }
 
         public string Secret { get; set; }
 

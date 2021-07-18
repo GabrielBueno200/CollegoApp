@@ -1,19 +1,14 @@
-using System.Net.NetworkInformation;
-using System.Buffers;
-using System.Threading.Tasks;
-using System.Net;
 using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Application.Security.Entities;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using API.Security.Extensions.Customs;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Security.Extensions
 {
@@ -51,6 +46,9 @@ namespace API.Security.Extensions
 
             services.AddSingleton(JwtValidationParams);
 
+            // Keep default JWT Claims Types
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
             //authentication
             services.AddAuthentication(options => {

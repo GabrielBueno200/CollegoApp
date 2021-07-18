@@ -51,7 +51,7 @@ namespace Application.Security.Services.Entities
             );
 
             var expiryToUTCDateTime = 
-                new DateTime(1970, 1, 1, 0, 0, 0).ToUniversalTime()
+                new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
             
             if (expiryToUTCDateTime > DateTime.UtcNow){
@@ -114,6 +114,7 @@ namespace Application.Security.Services.Entities
         }
 
         private bool IsUsingValidAlgorithmSecurity(JwtSecurityToken securityToken){
+
 
             var tokenAlgorithm = securityToken.Header.Alg;
             

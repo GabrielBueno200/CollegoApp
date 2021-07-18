@@ -25,7 +25,7 @@ namespace API.Controllers.Entities
         [AllowAnonymous]
         public async Task<IActionResult> RefreshTokenAsync([FromBody] TokenDTO tokenDTO){
         
-            var authResult = await _tokenService.RefreshTokenAsync(tokenDTO.Token, tokenDTO.RefreshToken);
+            var authResult = await _tokenService.RefreshTokenAsync(tokenDTO.AccessToken, tokenDTO.RefreshToken);
             
             if (_notificationsContext.HasNotifications){
 

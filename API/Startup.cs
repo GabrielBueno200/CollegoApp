@@ -4,7 +4,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using API.Settings;
+using API.Security.Extensions;
+using API.Infrastructure.Extensions;
+using API.Application.Extensions;
+using API.Mappers.Extensions;
+using API.Validation.Extensions;
+using API.Extensions;
+using API.Swagger.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 //API Project: Presentation Layer
 
@@ -28,6 +36,8 @@ namespace API
         {
 
             services.AddJWTSettings(Configuration, Environment);
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDatabaseSettings(Configuration);
 

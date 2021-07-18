@@ -1,13 +1,50 @@
+using System.Threading.Tasks;
+using Application.Core.DTOs.Entities;
+using Application.Core.Notifications;
+using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Entities
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ProfileController : ControllerBase {
 
-                /*[HttpDelete]
+        private readonly IProfileService _profileservice;
+
+        private readonly NotificationsContext _notificationsContext;
+
+        public ProfileController(IProfileService profileservice, NotificationsContext notificationsContext){
+            _profileservice = profileservice;
+            _notificationsContext = notificationsContext;
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> SignOutAsync(TokenDTO token){
+            
+            await _profileservice.SignOutAsync(token.RefreshToken);
+
+            if (_notificationsContext.HasNotifications){
+                
+                var notifications = _notificationsContext.JsonNotifications;
+
+                if (_notificationsContext.NotificationFromType(NotificationType.TOKEN_ERROR) != null)
+                    Unauthorized(notifications);
+
+                return BadRequest(notifications);   
+            }
+
+            return Ok(new {
+                Authenticated = false,
+                Message = "Agora você não está mais logado"
+            });
+        }
+
+        /*[HttpDelete]
         [Route("delete/{username}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string username){
-            
+
             await _service.DeleteAsync(username);
 
             if (responseHandler.HasErrors){
@@ -23,6 +60,6 @@ namespace API.Controllers.Entities
             return Ok(new { message = $"{username}, a sua conta foi deletada com sucesso" } );
 
         } */
-        
+
     }
 }

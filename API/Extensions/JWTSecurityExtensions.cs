@@ -14,22 +14,22 @@ using Microsoft.IdentityModel.Tokens;
 using Application.Security.Entities;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
-namespace API.Settings
+namespace API.Security.Extensions
 {
 
-    public static class JWTSettings
-    {
+    public static class JWTSecurityExtensions {
 
         public static void AddJWTSettings(this IServiceCollection services, IConfiguration Configuration,
-                                          IWebHostEnvironment Environment)
-        {
-
+                                          IWebHostEnvironment Environment){
+            
+            // JWT data settings from appsettings.json
             var JWTSettingsSection = Configuration.GetSection("JWTSettings");
-            services.Configure<TokenPayload>(JWTSettingsSection);
+            services.Configure<TokenSettings>(JWTSettingsSection);
 
-            var JWTSettings = JWTSettingsSection.Get<TokenPayload>();
+            var JWTSettings = JWTSettingsSection.Get<TokenSettings>();
             var key = Encoding.ASCII.GetBytes(JWTSettings.Secret);
 
+            // policy: authorization necessary to all controllers (except AllowAnonymous annotated)
             services.AddControllers(options => {
                 var policy = 
                     new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -37,43 +37,44 @@ namespace API.Settings
 
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+            
+            // token validation parameters (dependecy injection)
+            var JwtValidationParams = new TokenValidationParameters {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateAudience = true,
+                ValidAudience = JWTSettings.Audience,
+                ValidIssuer = JWTSettings.Issuer,
+                ValidateLifetime = true,
+            };
 
-            services.AddAuthentication(options =>
-            {
+            services.AddSingleton(JwtValidationParams);
+
+
+            //authentication
+            services.AddAuthentication(options => {
 
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddJwtBearer(options =>
-            {
+            }).AddJwtBearer(options => {
 
                 options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
+                options.TokenValidationParameters = JwtValidationParams;
 
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateAudience = true,
-                    ValidAudience = JWTSettings.Audience,
-                    ValidIssuer = JWTSettings.Issuer,
-                    ValidateLifetime = true,
 
-                };
-
-                options.Events = new JwtBearerEvents()
-                {
+                options.Events = new JwtBearerEvents() {
                     
-                    OnAuthenticationFailed = ctx =>
-                    {
+                    OnAuthenticationFailed = ctx => {
 
                         ctx.NoResult();
                         ctx.Response.ContentType = "application/json";
                         ctx.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
 
-                        string errorMessage = "An error has ocurred during your authentication proccess";
+                        string errorMessage = "Algum erro ocorreu durante o seu processo de autenticação!";
 
                         object jsonObject =
                                 Environment.IsDevelopment()
@@ -90,15 +91,37 @@ namespace API.Settings
 
                     },
 
-                    OnForbidden = ctx =>
-                    {
+                    OnChallenge = ctx => {
+
+                        if (!ctx.Response.HasStarted){
+
+                            ctx.Response.ContentType = "application/json";
+
+                            ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+
+                            string errorMessage = "Você não está autorizado!";
+
+                            object jsonObject = new { message = errorMessage };
+
+                            var responseContent =
+                                Encoding.UTF8.GetBytes(JsonSerializer.Serialize(jsonObject));
+
+                            ctx.Response.Body.WriteAsync(responseContent).GetAwaiter();
+
+                        }
+
+                        return Task.CompletedTask;
+
+                    },
+
+                    OnForbidden = ctx => {
 
                         ctx.NoResult();
                         ctx.Response.ContentType = "application/json";
                         ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
 
 
-                        string errorMessage = "You are not allowed to execute this";
+                        string errorMessage = "Não permitido!";
 
                         object jsonObject = new { message = errorMessage };
 
@@ -110,13 +133,14 @@ namespace API.Settings
 
                         return Task.CompletedTask;
 
-                    }
+                    },
+
                 };
 
             });
 
-            services.AddAuthorization(options =>
-            {
+            services.AddAuthorization(options => {
+                
                 options.AddPolicy(
                     "Bearer",
                      new AuthorizationPolicyBuilder()

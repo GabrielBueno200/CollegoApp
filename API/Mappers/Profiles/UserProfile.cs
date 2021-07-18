@@ -1,6 +1,6 @@
 using AutoMapper;
 using Domain.Models;
-using API.ViewModels;
+using Application.ViewModels;
 using Application.Core.DTOs;
 
 namespace API.Mappers

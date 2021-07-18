@@ -2,15 +2,16 @@ using Domain.Repositories.Interfaces;
 using Infrastructure.Repositories.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Settings
+namespace API.Infrastructure.Extensions
 {
-    public static class RepositoriesSettings{
+    public static class InfrastructureRepositoriesExtensions{
 
         public static void AddRepositoriesSettings(this IServiceCollection services){
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
         }
 

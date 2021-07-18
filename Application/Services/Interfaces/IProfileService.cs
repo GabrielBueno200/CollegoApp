@@ -10,8 +10,10 @@ namespace Application.Services.Interfaces
         Task DeleteAsync(string username);
         
         Task<User> EditAsync(Guid id);
-
+        
         IQueryable<User> List();
+
+        Task SignOutAsync(string token);
          
     }
 }

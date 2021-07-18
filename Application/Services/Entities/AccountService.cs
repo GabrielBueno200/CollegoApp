@@ -7,6 +7,8 @@ using Domain.Models;
 using Application.Core.DTOs;
 using FluentValidation;
 using Application.Core.Notifications;
+using Application.ViewModels;
+using Application.Core.DTOs.Entities;
 
 namespace Application.Services.Entities
 {
@@ -17,6 +19,8 @@ namespace Application.Services.Entities
         private readonly IUserService _userService;
 
         private readonly ITokenGeneratorService _tokenGeneratorService;
+
+        private readonly IRefreshTokenRepository _tokenRepository;
         
         private readonly IMapper _mapper;
 
@@ -32,10 +36,12 @@ namespace Application.Services.Entities
                               IValidator<UserRegisterDTO> registerDTOValidator,
                               IValidator<UserLoginDTO> loginDTOValidator,
                               ITokenGeneratorService tokenGeneratorService,
+                              IRefreshTokenRepository tokenRepository,
                               NotificationsContext notificationsHandler){
             _accountRepository = accountRepository;
             _userService = userService;
             _tokenGeneratorService = tokenGeneratorService;
+            _tokenRepository = tokenRepository;
             _mapper = mapper;
             _loginDTOValidator = loginDTOValidator;
             _registerDTOValidator = registerDTOValidator;
@@ -114,7 +120,7 @@ namespace Application.Services.Entities
 
             #endregion
 
-            var token = _tokenGeneratorService.GenerateToken(user);
+            var token = await _tokenGeneratorService.GenerateTokenAsync(user);
 
             var result = await _accountRepository.SignInAsync(user, userDto.Password);
 
@@ -125,15 +131,9 @@ namespace Application.Services.Entities
 
             return new {
                 token = token,
-                user = user
+                user = _mapper.Map<UserViewModel>(user)
             };
 
-
-        }
-
-        public async Task SignOutAsync(){
-
-            throw new NotImplementedException();
 
         }
 

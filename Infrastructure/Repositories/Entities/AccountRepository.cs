@@ -22,5 +22,7 @@ namespace Infrastructure.Repositories.Entities
     
         public async Task<SignInResult> SignInAsync(User user, string password) => await _signInManager.PasswordSignInAsync(user, password, false, true);
     
+        public async Task SignOutAsync() => await _signInManager.SignOutAsync();
+
     }
 }

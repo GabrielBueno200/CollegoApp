@@ -1,13 +1,8 @@
-using System.Net.Mime;
-using System;
-using System.Net;
-using System.Linq;
-using Domain.Models;
 using System.Threading.Tasks;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using API.ViewModels;
+using Application.ViewModels;
 using Application.Core.DTOs;
 using Application.Core.Notifications;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +11,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]
     [AllowAnonymous]
     public class AccountController : ControllerBase {
 

@@ -9,6 +9,8 @@ namespace Domain.Repositories.Interfaces
         Task<IdentityResult> DeleteAsync(User user);
         
         Task<IdentityResult> EditAsync(User user);
+
+        Task SignOutAsync();
          
     }
 }

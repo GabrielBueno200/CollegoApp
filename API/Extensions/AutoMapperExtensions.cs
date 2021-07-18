@@ -1,9 +1,9 @@
 using API.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Settings
+namespace API.Mappers.Extensions
 {
-    public static class AutoMapperSettings {
+    public static class AutoMapperExtensions {
 
         public static void AddAutoMapperSettings(this IServiceCollection services){
             

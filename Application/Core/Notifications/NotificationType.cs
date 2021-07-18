@@ -8,7 +8,9 @@ namespace Application.Core.Notifications
 
         NOT_AVAILABLE,
 
-        UNPROCESSABLE
+        UNPROCESSABLE,
+
+        TOKEN_ERROR
 
     }
 }

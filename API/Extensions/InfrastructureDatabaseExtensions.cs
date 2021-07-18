@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Settings
+namespace API.Infrastructure.Extensions
 {
-    public static class DatabaseSettings {
+    public static class InfrastructureDatabaseExtensions {
 
         public static void AddDatabaseSettings(this IServiceCollection services, IConfiguration Configuration){
 

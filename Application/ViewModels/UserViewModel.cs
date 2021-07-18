@@ -1,4 +1,4 @@
-namespace API.ViewModels
+namespace Application.ViewModels
 {
     public class UserViewModel {
         

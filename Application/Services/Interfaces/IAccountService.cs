@@ -1,8 +1,6 @@
-using System.Net.Mime;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Application.Core.DTOs;
+using Application.Core.DTOs.Entities;
 
 namespace Application.Services.Interfaces
 {
@@ -12,6 +10,5 @@ namespace Application.Services.Interfaces
 
         Task<object> SignInAsync(UserLoginDTO user);
 
-        Task SignOutAsync();    
     }
 }

@@ -1,6 +1,6 @@
 namespace Application.Security.Entities
 {
-    public class TokenPayload {
+    public class TokenSettings {
 
         public string Issuer { get; set; }
 

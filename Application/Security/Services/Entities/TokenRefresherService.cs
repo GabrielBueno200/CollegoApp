@@ -7,9 +7,7 @@ using Application.Core.Notifications;
 using Domain.Repositories.Interfaces;
 using Application.Services.Interfaces;
 using Application.Security.Entities;
-using Domain.Models.Security;
 using Application.Security.Services.Interfaces;
-using Domain.Models;
 
 namespace Application.Security.Services.Entities
 {

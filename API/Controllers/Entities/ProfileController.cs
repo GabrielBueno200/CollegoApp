@@ -3,6 +3,7 @@ using Application.Core.DTOs.Entities;
 using Application.Core.Notifications;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers.Entities
 {
@@ -18,6 +19,18 @@ namespace API.Controllers.Entities
             _profileservice = profileservice;
             _notificationsContext = notificationsContext;
         }
+
+        [HttpGet]
+        [Route("current")]
+        public async Task<IActionResult> GetCurrentUserAsync(){
+
+            var userName = User.FindFirstValue(claimType: ClaimTypes.Name); 
+
+            var user = await _profileservice.GetCurrentUserAsync(userName);
+
+            return Ok(user);
+
+        }  
 
         [HttpPost]
         [Route("logout")]

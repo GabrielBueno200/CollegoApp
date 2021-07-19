@@ -30,7 +30,7 @@ namespace API.Security.Extensions.Customs
 
             object jsonObject =
                     Environment.IsDevelopment()
-                    ? new { message = errorMessage, exception = ctx.Exception.ToString() }
+                    ? new { message = errorMessage, exception = ctx.Exception.Message }
                     : new { message = errorMessage };
 
             var responseContent =

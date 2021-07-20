@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 import { IUser } from '../../../../../models/user';
-import { requestUser, failedRequestingUser } from '../default/defaultActions';
+import { requestingUser, failedRequestingUser } from '../default/defaultActions';
 import { LoadUserActions, ILoadUserTypes } from './types';
 import { default as api } from '../endpoints';
 
@@ -19,7 +19,7 @@ const loadUserAsync = () => async (dispatch: Dispatch) => {
 
     try {
         
-        dispatch(requestUser());
+        dispatch(requestingUser());
 
         const user: IUser = await api.listUser();
 

@@ -1,6 +1,6 @@
 import { IDefaultUserTypes, DefaultUserActions, IUserError } from "./defaultTypes";
 
-export const requestUser = ():DefaultUserActions=> ({
+export const requestingUser = ():DefaultUserActions=> ({
     type: IDefaultUserTypes.USER_PENDING,
 });
 

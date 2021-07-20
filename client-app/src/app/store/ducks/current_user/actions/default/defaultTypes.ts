@@ -26,7 +26,7 @@ interface Rejected {
  */
 
 export interface IUserError {
-    message: string[]
+    messages: string[] | string
 };
 
 

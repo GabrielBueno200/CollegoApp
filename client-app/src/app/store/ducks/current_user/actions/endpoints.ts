@@ -1,7 +1,7 @@
 import { default as api } from '../../../../api';
 import { IUser } from "../../../../models/user";
 
-export enum Endpoints {
+const enum Endpoints {
     listUser = "Account/list"
 }
 

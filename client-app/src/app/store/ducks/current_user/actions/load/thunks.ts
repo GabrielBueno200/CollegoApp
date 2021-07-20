@@ -2,20 +2,22 @@ import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 import { IUser } from '../../../../../models/user';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
-import { LoadUserActions, ILoadUserTypes } from './types';
+import { ILoadUserTypes } from './types';
 import { default as api } from '../endpoints';
+import { UserActions } from '..';
+import { IUserError } from '../default/defaultTypes';
 
 
 /**
  *  Action body 
  */
-const loadUserAction = (user: IUser): LoadUserActions=> ({
+const loadUserAction = (user: IUser): UserActions => ({
     type: ILoadUserTypes.USER_SUCCESS,
     payload: user
 });
 
 
-const loadUserAsync = () => async (dispatch: Dispatch) => {
+const loadUserAsync = () => async (dispatch: Dispatch<UserActions>) => {
 
     try {
         
@@ -28,7 +30,8 @@ const loadUserAsync = () => async (dispatch: Dispatch) => {
     }
 
     catch(ex){
-        const error = (ex as AxiosError).response?.data;
+
+        const error = (ex as AxiosError<IUserError>).response!.data;
         
         dispatch(failedRequestingUser(error))
     }

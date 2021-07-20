@@ -2,7 +2,7 @@ import { default as api } from '../../../../api';
 import { IUser } from "../../../../models/user";
 
 export enum Endpoints {
-    listUser = "Account/list"
+    listUser = "Account/current"
 }
 
 interface IUserRequester {

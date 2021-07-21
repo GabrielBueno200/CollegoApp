@@ -1,31 +1,30 @@
 import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
-import { IUser } from '../../../../../models/user';
+import { IUser } from '../../../../../models/users/user';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
-import { ILoadUserTypes } from './types';
 import { default as api } from '../endpoints';
-import { UserActions } from '..';
+import { UserActions, UserTypes } from '..';
 import { IUserError } from '../default/defaultTypes';
+import { IUserRegister } from '../../../../../models/users/register';
 
 
 /**
  *  Action body 
  */
-const loadUserAction = (user: IUser): UserActions => ({
-    type: ILoadUserTypes.USER_SUCCESS,
-    payload: user
+const userRegisterAction = (): UserActions => ({
+    type: UserTypes.USER_REGISTERED_SUCCESS
 });
 
 
-const loadUserAsync = () => async (dispatch: Dispatch<UserActions>) => {
+export const signUpAsync = (data: IUserRegister) => async (dispatch: Dispatch<UserActions>) => {
 
     try {
         
         dispatch(requestingUser());
 
-        const user: IUser = await api.listUser();
+        await api.signUp(data);
 
-        dispatch(loadUserAction(user));
+        dispatch(userRegisterAction());
 
     }
 
@@ -37,4 +36,3 @@ const loadUserAsync = () => async (dispatch: Dispatch<UserActions>) => {
     }
 
 }
-

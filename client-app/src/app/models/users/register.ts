@@ -1,4 +1,4 @@
-export interface IUserRegisterForm {
+export interface IUserRegister {
     userName: string;
     fullName: string;
     email: string;
@@ -6,7 +6,7 @@ export interface IUserRegisterForm {
     confirmPassword: string;
     university: string;
     courseId: string;
-    notListedCourse: string;
+    notListedCourse?: string;
     termsAccepted: boolean;
-    profileThumbnail: BinaryType;
+    profileThumbnail?: BinaryType;
 }

@@ -1,9 +1,7 @@
-import { ILoadUserTypes, LoadUserActions } from "../load/types"
-
 /**
  * Actions Types
  */
- export enum IDefaultUserTypes {
+ export enum DefaultTypes {
     USER_PENDING = "@user/FETCH_USER_PENDING",
     USER_FAIL    = "@user/FETCH_USER_FAILED"
 };
@@ -13,11 +11,11 @@ import { ILoadUserTypes, LoadUserActions } from "../load/types"
  */
 
 interface Pending {
-    type: typeof IDefaultUserTypes.USER_PENDING
+    type: typeof DefaultTypes.USER_PENDING
 }
 
 interface Rejected {
-    type: typeof IDefaultUserTypes.USER_FAIL
+    type: typeof DefaultTypes.USER_FAIL
     payload: IUserError
 }
 
@@ -30,6 +28,4 @@ export interface IUserError {
 };
 
 
-export type DefaultUserActions = 
-      Pending
-    | Rejected
+export type DefaultActions = Pending | Rejected

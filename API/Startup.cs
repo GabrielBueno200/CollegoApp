@@ -36,6 +36,8 @@ namespace API
         {
 
             services.AddJWTSettings(Configuration, Environment);
+            
+            services.AddCorsSettings();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -49,7 +51,6 @@ namespace API
 
             services.AddFluentValidationSettings();
 
-            services.AddCorsSettings();
 
             services.AddSwaggerSettings();
 

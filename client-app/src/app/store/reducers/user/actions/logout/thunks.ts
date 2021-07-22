@@ -1,14 +1,10 @@
 import { AxiosError } from 'axios';
 import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
-import { IUserError } from '../default/defaultTypes';
 import { ITokens } from '../../../../../models/token/token';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
-import { dispatch, AsyncAction  } from '../../../..';
-
-
-
-
+import { AsyncAction  } from '../../../..';
+import { IError } from '../../../../../models/errors/errors';
 
 /**
  *  Action body 
@@ -32,12 +28,9 @@ export const signOutAsync = (tokens: ITokens):AsyncAction  => async dispatch => 
 
     catch(ex){
 
-        const error = (ex as AxiosError<IUserError>).response!.data;
+        const error = (ex as AxiosError<IError>).response!.data;
         
         dispatch(failedRequestingUser(error));
     }
 
 };
-
-
-export default (tokens:ITokens) => dispatch(signOutAsync(tokens));

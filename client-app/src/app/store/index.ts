@@ -13,7 +13,7 @@ const store: Store<AppState> = createStore(
     applyMiddleware(thunk as ThunkMiddleware<AppState, AppActions>)
 );
 
-export const dispatch = store.dispatch as ThunkDispatch<AppState, undefined, AppActions>
+export type AppDispatch = ThunkDispatch<AppState, undefined, AppActions>;
 
 export default store;
 

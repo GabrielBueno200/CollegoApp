@@ -1,3 +1,5 @@
+import { IError } from "../../../../../models/errors/errors";
+
 /**
  * Actions Types
  */
@@ -16,16 +18,8 @@ interface Pending {
 
 interface Rejected {
     type: typeof DefaultTypes.USER_FAIL
-    payload: IUserError
+    payload: IError
 }
-
-/**
- * Action rejected model
- */
-
-export interface IUserError {
-    messages: string[] | string
-};
 
 
 export type DefaultActions = Pending | Rejected

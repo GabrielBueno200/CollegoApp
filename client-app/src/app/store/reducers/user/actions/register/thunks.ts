@@ -1,11 +1,10 @@
 import { AxiosError } from 'axios';
-import { Dispatch } from 'redux';
-import { IUser } from '../../../../../models/users/user';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
 import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
-import { IUserError } from '../default/defaultTypes';
 import { IUserRegister } from '../../../../../models/users/register';
+import { AsyncAction } from '../../../..';
+import { IError } from '../../../../../models/errors/errors';
 
 
 /**
@@ -16,7 +15,7 @@ const userRegisterAction = (): UserActions => ({
 });
 
 
-export const signUpAsync = (data: IUserRegister) => async (dispatch: Dispatch<UserActions>) => {
+export const signUpAsync = (data: IUserRegister):AsyncAction => async dispatch => {
 
     try {
         
@@ -30,9 +29,11 @@ export const signUpAsync = (data: IUserRegister) => async (dispatch: Dispatch<Us
 
     catch(ex){
 
-        const error = (ex as AxiosError<IUserError>).response!.data;
+        const error = (ex as AxiosError<IError>).response!.data;
         
         dispatch(failedRequestingUser(error))
     }
 
-}
+};
+
+export default signUpAsync;

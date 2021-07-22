@@ -1,8 +1,8 @@
+import { IError } from "../../../../models/errors/errors";
 import { IUser } from "../../../../models/users/user";
-import { IUserError } from "../actions/default/defaultTypes";
 
 export default interface IUserState {
     readonly data: IUser | {},
     readonly pending: boolean,
-    readonly error?: IUserError
+    readonly error?: IError
 };

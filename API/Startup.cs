@@ -35,13 +35,13 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddJWTSettings(Configuration, Environment);
+            services.AddDatabaseSettings(Configuration);
             
-            services.AddCorsSettings();
+            services.AddJWTSettings(Configuration, Environment);
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddDatabaseSettings(Configuration);
+            services.AddCorsSettings();
 
             services.AddRepositoriesSettings();
 

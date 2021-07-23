@@ -10,9 +10,8 @@ import { IUser } from '../../../models/users/user';
 /* Redux */
 import { AppDispatch, AppState } from '../../../store';
 import signUpAsync from '../../../store/reducers/user/actions/register/thunks';
-import Input from './Input';
-import Checkbox from './Checkbox';
-
+import Input from '../../../common/Input';
+import Checkbox from '../../../common/Checkbox';
 
 
 interface IStateProps {
@@ -20,7 +19,7 @@ interface IStateProps {
 };
 
 interface IDispatchProps {
-    signUpAsync: (user: IUserRegister) => void;
+    signUpAsync: (user: IUserRegister) => Promise<void>;
 };
 
 type IProps = IStateProps & IDispatchProps;

@@ -1,0 +1,36 @@
+@import '../../../../styles/mixins/_flex';
+@import '../../../../styles/colors/_colors';
+@import '../../../../styles//fonts/fonts';
+
+.introduction{
+    @include flex-center;
+    background-color: $primary-color;
+    color: #ffff;
+    font-weight: bolder;
+    min-height: 100vh;
+    text-align: center;
+    background: url(static/man-introduction.png) bottom right no-repeat, 
+                url(static/woman-introduction.png) bottom left no-repeat, #00b0ff;;
+
+    .brand{
+        @include flex-center;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .subtitle{
+        font-size: 5em;
+        text-shadow: $default-text-shadow;
+        
+    }
+
+    .slogan{
+        margin-top: .5em;
+    }
+
+    .default-search-bar{
+        margin-top: 4em;
+        width: auto;
+    }
+
+}

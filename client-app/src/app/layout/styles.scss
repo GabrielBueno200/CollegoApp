@@ -1,0 +1,13 @@
+@import './styles/fonts/fonts';
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: $default-font-size;
+    box-sizing: border-box;
+}
+
+#root{
+    min-height: 100vh !important;
+    min-width: 100vw !important;
+}

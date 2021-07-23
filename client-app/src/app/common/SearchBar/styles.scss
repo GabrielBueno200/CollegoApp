@@ -1,0 +1,63 @@
+@import '../../layout/styles/mixins/flex';
+@import '../../layout/styles/colors/colors';
+
+
+.default-search-bar{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+    background: $secondary-color;
+    border-radius: 30px;
+    padding: 3px;
+    transition: 1s all ease;
+    overflow: hidden;
+
+
+    .search-input{
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        padding-left: .5em;
+        transition: 1s all ease;
+        
+
+        &:hover + .search-button{
+            background-color: #ffff;
+        }
+
+        &:hover{
+            display: block;
+        }
+
+        &:focus{
+            outline: none;
+            color: #ffff;
+        }
+
+    }
+
+
+    .search-button{
+        @include flex-center;
+        background: none;
+        border: none;
+        color: #ffff;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        padding: .5em;
+
+
+        &:hover{
+            background-color: #ffff;
+            color: $secondary-color;
+            transition: 1s all ease;
+        }
+
+        &:hover + .search-input{
+            display: block;
+        }
+    }
+
+}

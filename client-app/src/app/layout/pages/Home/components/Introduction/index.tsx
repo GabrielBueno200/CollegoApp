@@ -8,12 +8,14 @@ const Introduction: React.FC = () => {
     
         <div className="introduction">
             
+            <button value="Login"/>
+            <button value="Registrar-se"/>
+
             <div className="brand">
                 <h1 className="subtitle">COLLEGO</h1>
                 <h2 className="slogan">O SEU GRUPO DE ESTUDOS EM TODO LUGAR.</h2>
                 <SearchBar/>
             </div>
-
 
         </div>
 

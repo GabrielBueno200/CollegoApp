@@ -9,8 +9,28 @@
     font-weight: bolder;
     min-height: 100vh;
     text-align: center;
+    flex-direction: column;
     background: url(static/man-introduction.png) bottom right no-repeat, 
-                url(static/woman-introduction.png) bottom left no-repeat, #00b0ff;;
+                url(static/woman-introduction.png) bottom left no-repeat, #00b0ff;
+
+    .buttons{
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px 10px 0 0;
+    }
+
+    //separar em outro componente depois
+    .buttons button {
+        @include remove-default-styles;
+        background-color: $secondary-color;
+        padding: .5rem 1rem;
+        border-radius: 5px;
+        color: #ffff;
+        margin-left: 1em;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
 
     .brand{
         @include flex-center;

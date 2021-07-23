@@ -3,3 +3,9 @@
     align-items: center;
     justify-content: center;
 }
+
+@mixin remove-default-styles{
+    outline: none;
+    border: none;
+    background: none;
+}

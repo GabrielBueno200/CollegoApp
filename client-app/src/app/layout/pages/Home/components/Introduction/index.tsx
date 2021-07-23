@@ -8,8 +8,10 @@ const Introduction: React.FC = () => {
     
         <div className="introduction">
             
-            <button value="Login"/>
-            <button value="Registrar-se"/>
+            <div className="buttons">
+                <button>Logar</button>
+                <button>Cadastrar</button>
+            </div>
 
             <div className="brand">
                 <h1 className="subtitle">COLLEGO</h1>

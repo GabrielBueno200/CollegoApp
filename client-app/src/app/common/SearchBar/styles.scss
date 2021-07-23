@@ -9,9 +9,19 @@
     align-items: center;
     background: $secondary-color;
     border-radius: 30px;
-    transition: 1s all ease;
-    height: 3em;
+    border: 3px solid $secondary-color;
     overflow: hidden;
+    
+    &:hover > .search-button{
+        background-color: #ffff;
+        color: $secondary-color;
+        transition: 1s all ease;
+    }
+
+    &:hover > .search-input{
+        display: block;
+        transition: 1s all ease;
+    }
 
 
     .search-input{
@@ -21,12 +31,8 @@
         font-size: 1rem;
         padding-left: .5em;
         height: 100%;
+        color: #ffff;
         transition: 1s all ease;
-        
-
-        &:hover + .search-button{
-            background-color: #ffff;
-        }
 
         &:hover{
             display: block;
@@ -49,16 +55,6 @@
         font-size: 1.5rem;
         padding: .5em;
 
-
-        &:hover{
-            background-color: #ffff;
-            color: $secondary-color;
-            transition: 1s all ease;
-        }
-
-        &:hover + .search-input{
-            display: block;
-        }
     }
 
 }

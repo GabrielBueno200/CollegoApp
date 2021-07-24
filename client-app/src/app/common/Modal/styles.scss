@@ -18,7 +18,7 @@
         background-color: #FFFF;
         padding: 1em;
         border-radius: 5px;
-        overflow-y: scroll;
+        z-index: 1;
         @include positioned-center;
     }
 
@@ -37,8 +37,8 @@
 
     &-content{
         margin: 1em 0;
-        max-height: 100%;
-        max-width: 100%;
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
     }
     
 }

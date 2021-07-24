@@ -37,26 +37,28 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
     const handleSubmit = async (data:IUserRegister) => await signUpAsync(data);
     
     return(
+
         <Formik enableReinitialize initialValues={user} onSubmit={handleSubmit}>
-            {({handleSubmit}) => 
-                <Form className="user-register-form">
-                    <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
-                    <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
-                    <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
-                    <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha:"/>
-                    <Input placeholder="Confirme a sua senha..." type="password" name="confirmPassword" label="Confirmação de senha"/>
-                    
-                    {/*Alterar depois*/}
-                    <Input type="text" name="courseId" label="Curso:"/>
-                    <Input type="text" name="university" label="Universidade"/>
-                    {/* - */}
+            <Form className="user-register-form">
+                <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
+                <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
+                <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
+                <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha:"/>
+                <Input placeholder="Confirme a sua senha..." type="password" name="confirmPassword" label="Confirmação de senha"/>
+                
+                {/*Alterar depois*/}
+                <Input type="text" name="courseId" label="Curso:"/>
+                <Input type="text" name="university" label="Universidade"/>
+                {/* - */}
 
-                    <Checkbox label="Aceito os termos" name="termsAccepted"/>
+                <Checkbox label="Aceito os termos" name="termsAccepted"/>
 
-                    <Button type="submit">Enviar</Button>
+                <Button type="submit">Enviar</Button>
 
-                </Form>}
+            </Form>
         </Formik>
+
+        
     )
 }
 

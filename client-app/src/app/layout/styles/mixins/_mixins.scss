@@ -1,0 +1,24 @@
+@import '../colors/colors';
+
+@mixin flex-center{
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin remove-default-styles{
+    outline: none;
+    border: none;
+    background: none;
+}
+
+@mixin positioned-center{
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+@mixin danger-el{
+    background-color: $danger;
+    border: 1px solid $danger-border;
+}

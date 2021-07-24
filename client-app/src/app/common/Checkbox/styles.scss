@@ -1,0 +1,14 @@
+.default-checkbox{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin: 1em 0;
+    padding: 0;
+
+    &-box{
+        padding: 0;
+        max-width: 15px;
+        margin-right: 5px;
+    }
+}

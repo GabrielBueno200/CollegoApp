@@ -10,3 +10,14 @@ export interface IUserRegister {
     termsAccepted: boolean;
     profileThumbnail?: BinaryType;
 }
+
+export const EmptyUserRegisterObject : IUserRegister = {
+    userName: "",
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    courseId: "",
+    university: "",
+    termsAccepted: false
+};

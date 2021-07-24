@@ -1,0 +1,22 @@
+@import '../../../layout/styles/colors/colors';
+@import '../../../layout/styles/mixins/mixins';
+
+.default-button {
+    @include remove-default-styles;
+    cursor: pointer;
+    background-color: $secondary-color;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    color: #ffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.btn-danger{
+    @include danger-el;
+}
+
+.btn-light{
+    background-color: #ffff;
+    color: $secondary-color;
+}

@@ -1,5 +1,5 @@
-@import '../../../../styles/mixins/_flex';
-@import '../../../../styles/colors/_colors';
+@import '../../../../styles/mixins/mixins';
+@import '../../../../styles/colors/colors';
 @import '../../../../styles//fonts/fonts';
 
 .introduction{
@@ -18,18 +18,10 @@
         top: 0;
         right: 0;
         margin: 10px 10px 0 0;
-    }
-
-    //separar em outro componente depois
-    .buttons button {
-        @include remove-default-styles;
-        background-color: $secondary-color;
-        padding: .5rem 1rem;
-        border-radius: 5px;
-        color: #ffff;
-        margin-left: 1em;
-        font-weight: bold;
-        text-transform: uppercase;
+        
+        button:last-child{
+            margin-left: 1em;
+        }
     }
 
     .brand{
@@ -40,8 +32,8 @@
 
     .subtitle{
         font-size: 5em;
+        font-weight: 900;
         text-shadow: $default-text-shadow;
-        
     }
 
     .slogan{

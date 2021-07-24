@@ -1,10 +1,13 @@
 /* Modules | Functions */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
+
+/* Styles */
+import './styles.scss';
 
 /* Models */
-import { IUserRegister } from '../../../models/users/register';
+import { EmptyUserRegisterObject, IUserRegister } from '../../../models/users/register';
 import { IUser } from '../../../models/users/user';
 
 /* Redux */
@@ -12,8 +15,10 @@ import { AppDispatch, AppState } from '../../../store';
 import signUpAsync from '../../../store/reducers/user/actions/register/thunks';
 import Input from '../../../common/Input';
 import Checkbox from '../../../common/Checkbox';
+import Button from '../../../common/Buttons/Default';
+import Form from '../../../common/Form';
 
-
+/* Props */
 interface IStateProps {
     registeredUser: IUser | {};
 };
@@ -24,25 +29,17 @@ interface IDispatchProps {
 
 type IProps = IStateProps & IDispatchProps;
 
+
 const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 
-    const [user, setUser] = useState<IUserRegister>({
-        userName: "",
-        fullName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        courseId: "0f5c5c75-9c1c-4c68-918c-f619e40f1a50",
-        university: "Centro Universitário FEI",
-        termsAccepted: false
-    });
+    const [user] = useState<IUserRegister>({...EmptyUserRegisterObject});
 
     const handleSubmit = async (data:IUserRegister) => await signUpAsync(data);
     
     return(
         <Formik enableReinitialize initialValues={user} onSubmit={handleSubmit}>
             {({handleSubmit}) => 
-                <Form style={{display: 'flex', flexDirection: 'column'}} onSubmit={handleSubmit}>
+                <Form className="user-register-form">
                     <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
                     <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
                     <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
@@ -56,7 +53,7 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 
                     <Checkbox label="Aceito os termos" name="termsAccepted"/>
 
-                    <button type="submit">Enviar</button>
+                    <Button type="submit">Enviar</Button>
 
                 </Form>}
         </Formik>

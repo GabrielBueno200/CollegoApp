@@ -7,7 +7,7 @@ import './styles.scss';
 
 const Introduction: React.FC = () => {
 
-    const [ isRegistering, openRegisterModal, RegisterModal ] = useModal(["Cadastro de conta"]);
+    const [ isRegistering, openRegisterModal, RegisterModal ] = useModal(["Cadastro de conta", RegisterForm]);
   
     return( 
     
@@ -24,13 +24,7 @@ const Introduction: React.FC = () => {
                 <SearchBar/>
             </div>
 
-            {isRegistering && ( 
-                <RegisterModal>
-
-                    <RegisterForm/>
-
-                </RegisterModal>
-            )}
+            {isRegistering && ( <RegisterModal/> )}
 
         </div>
 

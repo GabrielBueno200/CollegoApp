@@ -8,12 +8,13 @@ type ModalHookReturn = [
 ];
 
 type ModalHookParams = [
-    string
+    string,
+    React.FC
 ]
 
-const useModal = ( [ title ] : ModalHookParams ) : ModalHookReturn  => {
+const useModal = ( [ title, Component ] : ModalHookParams ) : ModalHookReturn  => {
 
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [ showModal, setShowModal ] = useState<boolean>(false);
     
     const openModal = () => setShowModal(true);
 
@@ -23,7 +24,7 @@ const useModal = ( [ title ] : ModalHookParams ) : ModalHookReturn  => {
         <>
             <Modal title={title} onClose={closeModal}>
                 
-                { children }
+                <Component/>
 
             </Modal>
         </>

@@ -13,17 +13,20 @@ const Input: React.FC<IProps> = ({ label, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
+    <>
 
-    <span className="default-checkbox">
+      <span className="default-checkbox">
 
-      <input type="checkbox" className="default-checkbox-box" {...field} {...props} />
-        {label}
-    
+        <input type="checkbox" className="default-checkbox-box" {...field} {...props} />
+          {label}
+        
+      </span>
+
       {meta.touched && meta.error && (
-        <div className="error">{meta.error}</div>
+        <div className="form-field-error">{meta.error}</div>
       )}
-      
-    </span>
+
+    </>
 
   );
 };

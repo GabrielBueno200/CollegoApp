@@ -22,7 +22,7 @@ const Input: React.FC<IProps> = ({ label, ...props }) => {
       <input className="default-input-field" autoComplete="off" {...field} {...props} />
 
       {meta.touched && meta.error && (
-        <div className="error">{meta.error}</div>
+        <div className="form-field-error">{meta.error}</div>
       )}
 
     </span>

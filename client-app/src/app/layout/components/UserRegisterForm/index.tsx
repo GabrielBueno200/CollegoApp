@@ -1,5 +1,5 @@
 /* Modules | Functions */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 
@@ -13,10 +13,14 @@ import { IUser } from '../../../models/users/user';
 /* Redux */
 import { AppDispatch, AppState } from '../../../store';
 import signUpAsync from '../../../store/reducers/user/actions/register/thunks';
+
+/* Components */
 import Input from '../../../common/Input';
 import Checkbox from '../../../common/Checkbox';
 import Button from '../../../common/Buttons/Default';
 import Form from '../../../common/Form';
+import schema from './validation';
+import Select from '../../../common/Select';
 
 /* Props */
 interface IStateProps {
@@ -34,12 +38,14 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 
     const [user] = useState<IUserRegister>({...EmptyUserRegisterObject});
 
-    const handleSubmit = async (data:IUserRegister) => await signUpAsync(data);
+    const handleSubmit = useCallback(async (data:IUserRegister) => await signUpAsync(data), [registeredUser]);
     
     return(
 
-        <Formik enableReinitialize initialValues={user} onSubmit={handleSubmit}>
+        <Formik enableReinitialize initialValues={user} onSubmit={handleSubmit} validationSchema={schema}>
+            
             <Form className="user-register-form">
+
                 <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
                 <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
                 <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
@@ -50,18 +56,18 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
                         name="confirmPassword" label="Confirmação de senha" />
                 </div>
 
-                {/*Alterar depois*/}
-                <Input type="text" name="courseId" label="Curso:"/>
-                <Input type="text" name="university" label="Universidade"/>
-                {/* - */}
+                <div className="academics">
+                    <Select name="courseId" label="Curso" placeholder="Selecione o seu curso"/>
+                    <Select name="university" label="Universidade" placeholder="Selecione a sua universidade"/>
+                </div>
 
                 <Checkbox label="Aceito os termos" name="termsAccepted"/>
 
                 <Button type="submit">Enviar</Button>
 
             </Form>
-        </Formik>
 
+        </Formik>
         
     )
 }
@@ -75,4 +81,3 @@ const mapDispatchToProps = (dispatch:AppDispatch): IDispatchProps => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRegisterForm);
-

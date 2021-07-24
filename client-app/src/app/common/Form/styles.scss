@@ -3,3 +3,10 @@
 .default-form{
     color: $secondary-color;
 }
+
+.form-field-error{
+    font-weight: lighter;
+    font-size: 13px;
+    color: $alert-darker;
+    text-align: left;
+}

@@ -43,9 +43,13 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
                 <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
                 <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
                 <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
-                <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha:"/>
-                <Input placeholder="Confirme a sua senha..." type="password" name="confirmPassword" label="Confirmação de senha"/>
                 
+                <div className="passwords">
+                    <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha:"/>
+                    <Input placeholder="Confirme a sua senha..." type="password" 
+                        name="confirmPassword" label="Confirmação de senha" />
+                </div>
+
                 {/*Alterar depois*/}
                 <Input type="text" name="courseId" label="Curso:"/>
                 <Input type="text" name="university" label="Universidade"/>

@@ -5,6 +5,25 @@
     width: 99%;
     min-height: 100%;
 
+    .passwords{
+        display: flex;
+        width: 100%;
+
+        span:first-child{
+            margin-right: 5px;
+        }
+
+        @media screen and (max-width: 600px) {
+
+            flex-direction: column;
+
+            span:first-child{
+                margin-right: 0;
+            }
+        }
+
+    }
+
     input{
         width: 100%;
     }

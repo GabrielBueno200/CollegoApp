@@ -1,11 +1,11 @@
-import { IError } from "../../../../../models/errors/errors";
+import { AxiosError } from "axios";
 import { DefaultTypes, DefaultActions } from "./defaultTypes";
 
 export const requestingUser = (): DefaultActions=> ({
     type: DefaultTypes.USER_PENDING,
 });
 
-export const failedRequestingUser = (error: IError): DefaultActions=> ({
+export const failedRequestingUser = (error: AxiosError): DefaultActions=> ({
     type: DefaultTypes.USER_FAIL,
     payload: error
 });

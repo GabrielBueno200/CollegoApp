@@ -19,7 +19,7 @@ const Modal: React.FC<IProps> = ({ title, onClose, children }) => {
 
                 <div className="modal-header">
 
-                    { title } <GrClose onClick={onClose}/>
+                    { title } <GrClose className="modal-close-icon" onClick={onClose}/>
                     
                 </div>
 

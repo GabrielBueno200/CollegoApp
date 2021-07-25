@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Domain.Models;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.ViewModels;
 using Domain.Repositories.Interfaces;

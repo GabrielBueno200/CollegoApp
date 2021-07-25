@@ -10,7 +10,6 @@ using Application.Security.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Application.Security.Services.Interfaces;
 using Domain.Repositories.Interfaces;
 using Domain.Models.Security;
 using System.Threading.Tasks;

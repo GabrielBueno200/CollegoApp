@@ -4,7 +4,6 @@ import { UserActions, UserTypes } from '..';
 import { ITokens } from '../../../../../models/token/token';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
 import { AsyncAction  } from '../../../..';
-import { IError } from '../../../../../models/errors/errors';
 
 /**
  *  Action body 
@@ -28,7 +27,7 @@ export const signOutAsync = (tokens: ITokens):AsyncAction  => async dispatch => 
 
     catch(ex){
 
-        const error = (ex as AxiosError<IError>).response!.data;
+        const error = (ex as AxiosError).response!.data;
         
         dispatch(failedRequestingUser(error));
     }

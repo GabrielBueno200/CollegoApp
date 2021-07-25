@@ -36,7 +36,7 @@ namespace API
         {
 
             services.AddDatabaseSettings(Configuration);
-            
+
             services.AddJWTSettings(Configuration, Environment);
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -50,7 +50,6 @@ namespace API
             services.AddAutoMapperSettings();
 
             services.AddFluentValidationSettings();
-
 
             services.AddSwaggerSettings();
 

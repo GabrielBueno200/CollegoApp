@@ -11,7 +11,7 @@ namespace API.Extensions
                     policy
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
                     .WithOrigins("http://localhost:3000");
                 });
             });

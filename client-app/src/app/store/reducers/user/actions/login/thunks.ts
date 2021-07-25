@@ -5,7 +5,7 @@ import { requestingUser, failedRequestingUser } from '../default/defaultActions'
 import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
 import { IUserLogin } from '../../../../../models/users/login';
-import { IError } from '../../../../../models/errors/errors';
+import { AsyncAction } from '../../../..';
 
 
 /**
@@ -17,7 +17,7 @@ const userLoginAction = (user: IUser): UserActions => ({
 });
 
 
-const signInAsync = (data: IUserLogin) => async (dispatch: Dispatch<UserActions>) => {
+const signInAsync = (data: IUserLogin): AsyncAction => async dispatch => {
 
     try {
         
@@ -31,9 +31,11 @@ const signInAsync = (data: IUserLogin) => async (dispatch: Dispatch<UserActions>
 
     catch(ex){
 
-        const error = (ex as AxiosError<IError>).response!.data;
+        const error = (ex as AxiosError).response!.data;
         
         dispatch(failedRequestingUser(error))
     }
 
 }
+
+export default signInAsync;

@@ -46,7 +46,7 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
             
             <Form className="user-register-form">
 
-                <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome:"/>
+                <Input placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário:"/>
                 <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
                 <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
                 
@@ -61,7 +61,7 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
                     <Select name="university" label="Universidade" placeholder="Selecione a sua universidade"/>
                 </div>
 
-                <Checkbox label="Aceito os termos" name="termsAccepted"/>
+                <Checkbox label="Li e aceito os termos de condições de uso" name="termsAccepted"/>
 
                 <Button type="submit">Enviar</Button>
 

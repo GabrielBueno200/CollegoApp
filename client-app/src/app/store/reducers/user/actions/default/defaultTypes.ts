@@ -1,4 +1,4 @@
-import { IError } from "../../../../../models/errors/errors";
+import { AxiosError } from "axios";
 
 /**
  * Actions Types
@@ -18,7 +18,7 @@ interface Pending {
 
 interface Rejected {
     type: typeof DefaultTypes.USER_FAIL
-    payload: IError
+    payload: AxiosError
 }
 
 

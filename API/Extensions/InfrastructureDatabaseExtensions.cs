@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Infrastructure.Services.ExternalMongoServices;
 
 namespace API.Infrastructure.Extensions
 {
@@ -11,6 +12,8 @@ namespace API.Infrastructure.Extensions
 
         public static void AddDatabaseSettings(this IServiceCollection services, IConfiguration Configuration){
 
+            #region Identity and PostgresSQL
+            
             services.AddDbContext<DataContext>(opt => {
                 opt.UseNpgsql(Configuration["DBConnection:ConnectionString"]);
             });
@@ -25,6 +28,16 @@ namespace API.Infrastructure.Extensions
             })
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();
+
+            #endregion
+
+            #region MongoDb
+
+            services.Configure<MongoDbSettings>(Configuration.GetSection("MongoSettings"));
+
+            services.AddSingleton<MongoDbClient>();
+
+            #endregion
 
         }
         

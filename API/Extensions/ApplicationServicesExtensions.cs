@@ -14,6 +14,7 @@ namespace API.Application.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IUniversityService, UniversityService>();
             services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
             services.AddScoped<ITokenRefresherService, TokenRefresherService>();
             services.AddScoped<NotificationsContext>();

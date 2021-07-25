@@ -4,7 +4,6 @@ import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
 import { IUserRegister } from '../../../../../models/users/register';
 import { AsyncAction } from '../../../..';
-import { IError } from '../../../../../models/errors/errors';
 
 
 /**
@@ -15,7 +14,7 @@ const userRegisterAction = (): UserActions => ({
 });
 
 
-export const signUpAsync = (data: IUserRegister):AsyncAction => async dispatch => {
+export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch => {
 
     try {
         
@@ -28,7 +27,7 @@ export const signUpAsync = (data: IUserRegister):AsyncAction => async dispatch =
 
     catch(ex){
 
-        const error = (ex as AxiosError<IError>).response!.data;
+        const error = (ex as AxiosError).response!.data;
         
         dispatch(failedRequestingUser(error))
     }

@@ -4,7 +4,7 @@ import { IUser } from '../../../../../models/users/user';
 import { requestingUser, failedRequestingUser } from '../default/defaultActions';
 import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
-import { IError } from '../../../../../models/errors/errors';
+import { AsyncAction } from '../../../..';
 
 
 /**
@@ -16,7 +16,7 @@ const loadUserAction = (user: IUser): UserActions => ({
 });
 
 
-const loadUserAsync = () => async (dispatch: Dispatch<UserActions>) => {
+const loadUserAsync = (): AsyncAction => async dispatch => {
 
     try {
         
@@ -30,10 +30,12 @@ const loadUserAsync = () => async (dispatch: Dispatch<UserActions>) => {
 
     catch(ex){
 
-        const error = (ex as AxiosError<IError>).response!.data;
+        const error = (ex as AxiosError).response!.data;
         
         dispatch(failedRequestingUser(error))
     }
 
 }
+
+export default loadUserAsync;
 

@@ -4,8 +4,8 @@ export interface IUserRegister {
     email: string;
     password: string;
     confirmPassword: string;
-    university: string;
-    courseId: string;
+    university?: number;
+    courseId?: string;
     notListedCourse?: string;
     termsAccepted: boolean;
     profileThumbnail?: BinaryType;
@@ -17,7 +17,8 @@ export const EmptyUserRegisterObject : IUserRegister = {
     email: "",
     password: "",
     confirmPassword: "",
-    courseId: "",
-    university: "",
+    courseId: undefined,
+    university: undefined,
+    notListedCourse: undefined,
     termsAccepted: false
 };

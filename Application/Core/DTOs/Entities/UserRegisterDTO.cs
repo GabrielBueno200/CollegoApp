@@ -12,7 +12,7 @@ namespace Application.Core.DTOs
         
         public string ConfirmPassword { get; set; }
 
-        public string University { get; set; }
+        public double University { get; set; }
 
         public string CourseId { get; set; }
 

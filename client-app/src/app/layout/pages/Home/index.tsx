@@ -4,7 +4,6 @@ import Introduction from './components/Introduction';
 const Home: React.FC = () => {
   
     return(
-
         <Fragment>
         
             <Introduction/>

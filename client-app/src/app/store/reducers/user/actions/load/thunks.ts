@@ -22,7 +22,7 @@ const loadUserAsync = (): AsyncAction => async dispatch => {
         
         dispatch(requestingUser());
 
-        const user: IUser = await api.listUser();
+        const user = await api.listUser();
 
         dispatch(loadUserAction(user));
 

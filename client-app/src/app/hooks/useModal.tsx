@@ -10,7 +10,7 @@ type ModalHookReturn = [
 type ModalHookParams = [
     string,
     React.FC
-]
+];
 
 const useModal = ( [ title, Component ] : ModalHookParams ) : ModalHookReturn  => {
 
@@ -29,7 +29,7 @@ const useModal = ( [ title, Component ] : ModalHookParams ) : ModalHookReturn  =
             </Modal>
         </>
 
-    return [showModal, openModal, CustomModal]
+    return [showModal, openModal, CustomModal];
 
 }
 

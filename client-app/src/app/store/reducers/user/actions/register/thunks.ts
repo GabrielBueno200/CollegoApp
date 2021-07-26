@@ -19,7 +19,8 @@ export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch 
     try {
         
         dispatch(requestingUser());
-           await api.signUp(data);
+        
+        await api.signUp(data);
 
         dispatch(userRegisterAction());
 

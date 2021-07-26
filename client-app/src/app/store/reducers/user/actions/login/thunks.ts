@@ -23,7 +23,7 @@ const signInAsync = (data: IUserLogin): AsyncAction => async dispatch => {
         
         dispatch(requestingUser());
 
-        const user: IUser = await api.signIn(data);
+        const user = await api.signIn(data);
 
         dispatch(userLoginAction(user));
 

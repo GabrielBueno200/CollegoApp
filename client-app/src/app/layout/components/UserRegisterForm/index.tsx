@@ -21,6 +21,9 @@ import Button from '../../../common/Buttons/Default';
 import Form from '../../../common/Form';
 import schema from './validation';
 import Select from '../../../common/Select';
+import { IUniversity } from '../../../models/universities/university';
+import findByAcronymAsync from '../../../store/reducers/universities/actions/findByAcronym/thunks';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 /* Props */
 interface IStateProps {
@@ -29,6 +32,7 @@ interface IStateProps {
 
 interface IDispatchProps {
     signUpAsync: (user: IUserRegister) => Promise<void>;
+    findUniversitiesByAcronym: (acronym: string) => Promise<void>;
 };
 
 type IProps = IStateProps & IDispatchProps;
@@ -58,7 +62,13 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 
                 <div className="academics">
                     <Select name="courseId" label="Curso" placeholder="Selecione o seu curso"/>
-                    <Select name="university" label="Universidade" placeholder="Selecione a sua universidade"/>
+                    
+                    {/*Provisório*/}
+                    <div style={{display: 'flex'}}>    
+                        <Select name="university" label="Universidade" placeholder="Selecione a sua universidade"/>
+                        <Button style={{height: 'min-content', padding: 0}}><AiOutlineSearch/></Button>
+                    </div>
+
                 </div>
 
                 <Checkbox label="Li e aceito os termos de condições de uso" name="termsAccepted"/>
@@ -77,7 +87,8 @@ const mapStateToProps = (state:AppState): IStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch:AppDispatch): IDispatchProps => ({
-    signUpAsync: (user:IUserRegister) => dispatch(signUpAsync(user))
+    signUpAsync: (user:IUserRegister) => dispatch(signUpAsync(user)),
+    findUniversitiesByAcronym: (acronym: string) => dispatch(findByAcronymAsync(acronym))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRegisterForm);

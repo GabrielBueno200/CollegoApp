@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-
 /**
  * Actions Types
  */
@@ -18,7 +16,7 @@ interface Pending {
 
 interface Rejected {
     type: typeof DefaultTypes.USER_FAIL
-    payload: AxiosError
+    payload: any
 }
 
 

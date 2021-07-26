@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories.Entities
         }
 
         public async Task<List<University>> FindByAcronymAsync(string acronym)
-            => (await _context.FindAsync(x => x.Acronym.StartsWith(acronym))).ToList();
+            => (await _context.FindAsync(x => x.Acronym.Contains(acronym))).ToList();
             
     }
 }

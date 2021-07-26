@@ -8,7 +8,6 @@ using Application.Core.DTOs;
 using FluentValidation;
 using Application.Core.Notifications;
 using Application.ViewModels;
-using Application.Core.DTOs.Entities;
 
 namespace Application.Services.Entities
 {

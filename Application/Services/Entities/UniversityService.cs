@@ -10,13 +10,14 @@ namespace Application.Services.Entities
 
         private readonly IUniversityRepository _universityRepository;
 
-        public UniversityService(IUniversityRepository universityRepository){
+        public UniversityService(IUniversityRepository universityRepository)
+        {
             _universityRepository = universityRepository;
         }
 
-        public Task<List<University>> FindByAcronymAsync(string acronym){
+        public async Task<List<University>> FindByAcronymAsync(string acronym){
             
-            return _universityRepository.FindByAcronymAsync(acronym);
+            return await _universityRepository.FindByAcronymAsync(acronym);
 
         }
 

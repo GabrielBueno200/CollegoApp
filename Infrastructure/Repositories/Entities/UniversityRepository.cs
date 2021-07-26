@@ -15,8 +15,8 @@ namespace Infrastructure.Repositories.Entities
             _context = dbClient.GetUniversitiesCollection();
         }
 
-        public async Task<List<University>> FindByAcronymAsync(string acronym) 
-            => (await _context.FindAsync(x => x.Acronym == acronym)).ToList();
-
+        public async Task<List<University>> FindByAcronymAsync(string acronym)
+            => (await _context.FindAsync(x => x.Acronym.StartsWith(acronym))).ToList();
+            
     }
 }

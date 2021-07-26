@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Entities
@@ -15,7 +16,8 @@ namespace API.Controllers.Entities
         }
 
         [HttpGet]
-        [Route("findByAcronym")]
+        [Route("findByAcronym/{acronym}")]
+        [AllowAnonymous]
         public async Task<IActionResult> FindByAcronym([FromRoute] string acronym){
             
             var universities = await _universityService.FindByAcronymAsync(acronym);

@@ -24,7 +24,7 @@ import Checkbox from '../../../common/Checkbox';
 import Button from '../../../common/Buttons/Default';
 import Form from '../../../common/Form';
 import Select from '../../../common/Select';
-import UniversitySelect from '../../../common/Select/UniversitySelect';
+import AsyncSelect from '../../../common/Select/AsyncSelect';
 
 /* Props */
 interface IStateProps {
@@ -66,12 +66,12 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync, univer
 
                 <div className="academics">
                     <Select name="courseId" label="Curso" placeholder="Selecione o seu curso"/>
-                    <UniversitySelect 
-                        asyncFunction={ loadUniversities }
+                    <AsyncSelect 
                         data = { universities }
-                        mapDataToSelect = { mapUniversitiesToSelect }
                         name="university"  
                         label="Universidade" 
+                        loadAsync={ loadUniversities }
+                        mapDataToSelect = { mapUniversitiesToSelect }
                         placeholder="Pesquise pela sua universidade (por sigla)"/>
                 </div>
 

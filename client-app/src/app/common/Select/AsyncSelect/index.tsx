@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useField } from 'formik';
 import { IOption } from '../Options';
-import { IUniversity } from '../../../models/universities/university';
 import Select from 'react-select';
 
 interface IProps {
@@ -11,16 +10,16 @@ interface IProps {
   className?: string;
   placeholder: string;
   value?: string;
-  asyncFunction: (valueToSearch: string) => Promise<void>;
-  mapDataToSelect: (data: IUniversity[]) => IOption[];
-  data: IUniversity[];
+  loadAsync: (valueToSearch: string) => Promise<void>;
+  mapDataToSelect: (data: any[]) => IOption[];
+  data: any[];
 };
 
 
-const UniversitySelect: React.FC<IProps> = 
+const AsyncSelect: React.FC<IProps> = 
   ({ 
     label, 
-    asyncFunction,
+    loadAsync,
     data,
     mapDataToSelect,
     ...props 
@@ -30,7 +29,7 @@ const UniversitySelect: React.FC<IProps> =
 
   const [ valueToSearch, setValueToSearch ] = useState<string>('');
 
-  const searchValues = async () => await asyncFunction(valueToSearch);
+  const searchValues = async () => await loadAsync(valueToSearch);
 
   return (
     <span className={`default-select`}>
@@ -56,4 +55,4 @@ const UniversitySelect: React.FC<IProps> =
   );
 };
 
-export default UniversitySelect;
+export default AsyncSelect;

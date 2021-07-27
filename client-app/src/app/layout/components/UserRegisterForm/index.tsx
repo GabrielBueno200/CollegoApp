@@ -2,6 +2,8 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import { mapUniversitiesToSelect } from '../../../services/university/map';
+import schema from './validation';
 
 /* Styles */
 import './styles.scss';
@@ -9,25 +11,25 @@ import './styles.scss';
 /* Models */
 import { EmptyUserRegisterObject, IUserRegister } from '../../../models/users/register';
 import { IUser } from '../../../models/users/user';
+import { IUniversity } from '../../../models/universities/university';
 
 /* Redux */
 import { AppDispatch, AppState } from '../../../store';
 import signUpAsync from '../../../store/reducers/user/actions/register/thunks';
+import findByAcronymAsync from '../../../store/reducers/universities/actions/findByAcronym/thunks';
 
 /* Components */
 import Input from '../../../common/Input';
 import Checkbox from '../../../common/Checkbox';
 import Button from '../../../common/Buttons/Default';
 import Form from '../../../common/Form';
-import schema from './validation';
 import Select from '../../../common/Select';
-import { IUniversity } from '../../../models/universities/university';
-import findByAcronymAsync from '../../../store/reducers/universities/actions/findByAcronym/thunks';
-import { AiOutlineSearch } from 'react-icons/ai';
+import UniversitySelect from '../../../common/Select/UniversitySelect';
 
 /* Props */
 interface IStateProps {
     registeredUser: IUser | {};
+    universities: IUniversity[] | [];
 };
 
 interface IDispatchProps {
@@ -38,12 +40,14 @@ interface IDispatchProps {
 type IProps = IStateProps & IDispatchProps;
 
 
-const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
+const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync, universities, findUniversitiesByAcronym}) => {
 
     const [user] = useState<IUserRegister>({...EmptyUserRegisterObject});
 
     const handleSubmit = useCallback(async (data:IUserRegister) => await signUpAsync(data), [registeredUser]);
     
+    const loadUniversities = useCallback(async (acronym: string) => await findUniversitiesByAcronym(acronym), [universities]);
+
     return(
 
         <Formik enableReinitialize initialValues={user} onSubmit={handleSubmit} validationSchema={schema}>
@@ -62,18 +66,18 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 
                 <div className="academics">
                     <Select name="courseId" label="Curso" placeholder="Selecione o seu curso"/>
-                    
-                    {/*Provisório*/}
-                    <div style={{display: 'flex'}}>    
-                        <Select name="university" label="Universidade" placeholder="Selecione a sua universidade"/>
-                        <Button style={{height: 'min-content', padding: 0}}><AiOutlineSearch/></Button>
-                    </div>
-
+                    <UniversitySelect 
+                        asyncFunction={ loadUniversities }
+                        data = { universities }
+                        mapDataToSelect = { mapUniversitiesToSelect }
+                        name="university"  
+                        label="Universidade" 
+                        placeholder="Pesquise pela sua universidade (por sigla)"/>
                 </div>
 
                 <Checkbox label="Li e aceito os termos de condições de uso" name="termsAccepted"/>
 
-                <Button type="submit">Enviar</Button>
+                <Button className="submit-button" type="submit">Enviar</Button>
 
             </Form>
 
@@ -83,7 +87,8 @@ const UserRegisterForm: React.FC<IProps> = ({registeredUser, signUpAsync}) => {
 }
 
 const mapStateToProps = (state:AppState): IStateProps => ({
-    registeredUser: state.users
+    registeredUser: state.users.data,
+    universities: state.universities.data
 });
 
 const mapDispatchToProps = (dispatch:AppDispatch): IDispatchProps => ({

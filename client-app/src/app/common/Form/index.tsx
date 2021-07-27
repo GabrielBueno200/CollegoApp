@@ -10,7 +10,9 @@ import './styles.scss'
 
 const Form: React.FC<FormikFormProps> = props => {
 
-    return <FormikForm {...props} className={`default-form ${props.className}`}/>
+    return <FormikForm {...props} 
+                onKeyDown={e => e.code === "Enter" && e.preventDefault()} 
+                className={`default-form ${props.className}`}/>
 };
 
 

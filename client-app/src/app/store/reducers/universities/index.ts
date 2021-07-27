@@ -3,7 +3,7 @@ import IUniversityState from "./models/state";
 import { UniversityActions, UniversityTypes } from "./actions";
 
 const initialState : IUniversityState = {
-    data: {},
+    data: [],
     pending: false
 };
 
@@ -20,6 +20,9 @@ const UniversityReducer : Reducer<IUniversityState> = (state = initialState, act
 
         case UniversityTypes.GET_UNIVERSITY_BY_ACRONYM_SUCCESS:
             return { ...state, pending: false, error: false, data: action.payload };
+        
+        default:
+            return state;
 
     }
 };

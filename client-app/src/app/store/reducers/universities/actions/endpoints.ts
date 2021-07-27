@@ -6,11 +6,11 @@ export enum Endpoints {
 }
 
 interface IUniversityRequester {
-    findByAcronym: (acronym: string) => Promise<IUniversity>;
+    findByAcronym: (acronym: string) => Promise<IUniversity[]>;
 };
 
 const ApiRequest : IUniversityRequester = {
-    findByAcronym: (acronym: string) => api.get<IUniversity>(`${Endpoints.findByAcronym}/${acronym}`)
+    findByAcronym: (acronym: string) => api.get<IUniversity[]>(`${Endpoints.findByAcronym}/${acronym}`)
 };
 
 export default ApiRequest;

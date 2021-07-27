@@ -10,10 +10,10 @@ export enum LoadTypes {
 /**
  * Action formats
  */
-export interface LoadedUniversity {
+export interface LoadedUniversities {
     type: typeof LoadTypes.GET_UNIVERSITY_BY_ACRONYM_SUCCESS;
-    payload: IUniversity
+    payload: IUniversity[]
 };
 
 
-export type LoadActions = LoadedUniversity;
+export type LoadActions = LoadedUniversities;

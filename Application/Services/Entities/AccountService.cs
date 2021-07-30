@@ -1,13 +1,12 @@
-using System;
-using System.Threading.Tasks;
-using Domain.Repositories.Interfaces;
-using Application.Services.Interfaces;
 using AutoMapper;
 using Domain.Models;
-using Application.Core.DTOs;
 using FluentValidation;
-using Application.Core.Notifications;
+using Application.Core.DTOs;
 using Application.ViewModels;
+using System.Threading.Tasks;
+using Application.Core.Notifications;
+using Domain.Repositories.Interfaces;
+using Application.Services.Interfaces;
 
 namespace Application.Services.Entities
 {
@@ -27,7 +26,7 @@ namespace Application.Services.Entities
         
         private readonly IValidator<UserLoginDTO> _loginDTOValidator;
 
-        private readonly NotificationsContext notificationsHandler;
+        private readonly NotificationsContext _notificationsContext;
 
         public AccountService(IAccountRepository accountRepository, 
                               IUserService userService,
@@ -36,7 +35,7 @@ namespace Application.Services.Entities
                               IValidator<UserLoginDTO> loginDTOValidator,
                               ITokenGeneratorService tokenGeneratorService,
                               IRefreshTokenRepository tokenRepository,
-                              NotificationsContext notificationsHandler){
+                              NotificationsContext notificationsContext){
             _accountRepository = accountRepository;
             _userService = userService;
             _tokenGeneratorService = tokenGeneratorService;
@@ -44,7 +43,7 @@ namespace Application.Services.Entities
             _mapper = mapper;
             _loginDTOValidator = loginDTOValidator;
             _registerDTOValidator = registerDTOValidator;
-            this.notificationsHandler = notificationsHandler;
+            _notificationsContext = notificationsContext;
         }
 
         public async Task SignUpAsync(UserRegisterDTO userDto){
@@ -54,7 +53,7 @@ namespace Application.Services.Entities
             var dtoValidationResult = await _registerDTOValidator.ValidateAsync(userDto);
 
             if (!dtoValidationResult.IsValid) {
-                notificationsHandler.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
+                _notificationsContext.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
                 return;
             }
             
@@ -76,7 +75,7 @@ namespace Application.Services.Entities
             var userValidationResult = await _userService.ValidateAsync(user);
 
             if (!userValidationResult.Succeeded){
-                notificationsHandler.Notifications = 
+                _notificationsContext.Notifications = 
                     ResponseNotifications.getIdentityResultErrors(userValidationResult);
                 return;
             }
@@ -100,7 +99,7 @@ namespace Application.Services.Entities
             var dtoValidationResult = await _loginDTOValidator.ValidateAsync(userDto);
 
             if (!dtoValidationResult.IsValid) {
-                notificationsHandler.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
+                _notificationsContext.Notifications = ResponseNotifications.getResultErrors(dtoValidationResult);
                 return null;
             }
             
@@ -113,7 +112,7 @@ namespace Application.Services.Entities
                      : userDto.Username != null ? await _userService.FindByUsernameAsync(userDto.Username) : null;
 
             if (user == null){
-                notificationsHandler.AddNotification($"Não encontrado usuário cadastrado com o username/e-mail informado!", NotificationType.ENTITY_NOT_FOUND);
+                _notificationsContext.AddNotification($"Não encontrado usuário cadastrado com o username/e-mail informado!", NotificationType.ENTITY_NOT_FOUND);
                 return null;
             }
 
@@ -124,7 +123,7 @@ namespace Application.Services.Entities
             var result = await _accountRepository.SignInAsync(user, userDto.Password);
 
             if(!result.Succeeded){
-                notificationsHandler.AddNotification("E-mail ou senha incorreto!", NotificationType.UNPROCESSABLE);
+                _notificationsContext.AddNotification("E-mail ou senha incorreto!", NotificationType.UNPROCESSABLE);
                 return null;
             }
 
@@ -132,7 +131,6 @@ namespace Application.Services.Entities
                 token = token,
                 user = _mapper.Map<UserViewModel>(user)
             };
-
 
         }
 

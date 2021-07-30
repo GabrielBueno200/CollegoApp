@@ -12,6 +12,7 @@ namespace API.Infrastructure.Extensions
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IUniversityRepository, UniversityRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
         }

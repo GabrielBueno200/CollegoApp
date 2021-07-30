@@ -8,13 +8,14 @@ interface IProps {
   label: string;
   name: string;
   hasButton?: boolean;
-  options?: IOption[];
   className?: string;
   placeholder: string;
   value?: string;
+  data: any;
+  mapDataToSelect: (data: any[]) => IOption[];
 }
 
-const Select: React.FC<IProps> = ({ label, children, ...props }) => {
+const Select: React.FC<IProps> = ({ label, data, mapDataToSelect, children, ...props }) => {
   
   const [field, meta, helpers] = useField(props);
 
@@ -24,17 +25,12 @@ const Select: React.FC<IProps> = ({ label, children, ...props }) => {
       <label className="default-select-label">{ label }</label>
       
       <ReactSelect 
-            className="default-select-field"
-            name={ props.name }
-            defaultValue={ props.value || undefined }
-            value={ field.value || undefined }   
-            onChange={ e => helpers.setValue(e.target.value) }
-            placeholder={ props.placeholder } 
-      >
-            <option value="val1">Valor 1</option>     
-            <option value="val2">Valor 2</option>   
-          
-      </ReactSelect> 
+          className="default-select-field"
+          name={ props.name }
+          options={ mapDataToSelect(data) }
+          onChange={ x => { helpers.setValue(x!.value) } }
+          placeholder={ props.placeholder } 
+      />
 
       {meta.touched && meta.error && (
         <div className="form-field-error">{meta.error}</div>

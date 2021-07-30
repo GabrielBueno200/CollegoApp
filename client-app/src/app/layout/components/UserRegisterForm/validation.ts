@@ -1,5 +1,29 @@
 import * as Yup from 'yup';
 
+/**
+ * Masks
+ */
+export const usernameMask = [
+    "(",
+    /[1-9]/,
+    /\d/,
+    /\d/,
+    ")",
+    " ",
+    /\d/,
+    /\d/,
+    /\d/,
+    "-",
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/
+  ];
+
+
+/**
+ * Validation
+ */
 class ValidationConstants {
 
     static PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
@@ -8,6 +32,7 @@ class ValidationConstants {
     static ACCEPT_TERMS_ERROR = "Você só poderá continuar se aceitar os termos de uso";
 
 };
+
 
 const schema = Yup.object({
 

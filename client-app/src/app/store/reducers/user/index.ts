@@ -26,6 +26,9 @@ const UserReducer: Reducer<IUserState> = (state = initialState, action: UserActi
         case UserTypes.USER_EXIT_SUCCESS :
             return { ...state, pending: false, user: {}};
         
+        case UserTypes.CLEAR_USER_ERRORS :
+            return { ...state, error: null };
+        
         default:
             return state;
     }

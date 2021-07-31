@@ -19,7 +19,9 @@ namespace Application.Core.Notifications
 
         public void AddNotification(string name, NotificationType type) => ResponseNotifications.AddNotification(Notifications, name, type);
 
-        public object JsonNotifications { get {
+        public object JsonNotifications { get { return new { errors = Notifications }; }}
+        
+        public object JsonNotificationsByType { get {
 
             dynamic notificationsByTypeObject = new ExpandoObject();
             var NotificationTypes = Notifications.DistinctBy(x => x.Type).Select(x => x.Type.ToString());

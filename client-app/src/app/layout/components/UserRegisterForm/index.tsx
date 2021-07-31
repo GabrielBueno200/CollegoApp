@@ -27,6 +27,9 @@ import Form from '../../../common/Form';
 import Select from '../../../common/Select';
 import AsyncSelect from '../../../common/Select/AsyncSelect';
 
+/* Hooks */
+import useWarnings from '../../../hooks/useWarnings';
+
 /* Utils */
 import schema, { usernameFormat, fullnameFormat } from './validation';
 import { mapCoursesToSelect } from '../../../services/course/map';
@@ -38,6 +41,7 @@ interface IStateProps {
     universities: IUniversity[] | [];
     isUniversitiesLoading: boolean;
     courses: ICourse[] | [];
+    errors: any;
 };
 
 interface IDispatchProps {
@@ -56,68 +60,80 @@ const UserRegisterForm: React.FC<IProps> = ({
     signUpAsync,
     findCoursesAsync,
     findUniversitiesByAcronym,
-    isUniversitiesLoading
+    isUniversitiesLoading,
+    errors,
 }) => {
 
     const [ user ] = useState<IUserRegister>({...EmptyUserRegisterObject});
 
-    const handleSubmit = useCallback(async (data:IUserRegister) => await signUpAsync(data), [registeredUser]);
+    const [ hasWarnings, showWarnings, Warnings ] = useWarnings([errors, true]);
+
+    const handleSubmit = useCallback(async (data:IUserRegister) => { 
+        
+        await signUpAsync(data);
+        
+        errors && showWarnings();
+
+    }, [registeredUser]);
     
     const loadUniversities = useCallback(async (acronym: string) => await findUniversitiesByAcronym(acronym), [universities]);
 
     useEffect(() => { findCoursesAsync().then() }, []);
 
     return(
+        <>
+            {hasWarnings && <Warnings/>}
 
-        <Formik enableReinitialize initialValues={ user } onSubmit={ handleSubmit } validationSchema={ schema }>
-            
-            <Form className="user-register-form">
-
-                <MaskedInput symbol="@" format={usernameFormat} placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário"/>
-                <MaskedInput format={fullnameFormat} placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo"/>
-                <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email"/>
+            <Formik enableReinitialize initialValues={ user } onSubmit={ handleSubmit } validationSchema={ schema }>
                 
-                <div className="passwords">
-                    <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha"/>
-                    <Input placeholder="Confirme a sua senha..." type="password" 
-                        name="confirmPassword" label="Confirmação de senha" />
-                </div>
+                <Form className="user-register-form">
 
-                <div className="academics">
-
-                    <Select 
-                        data={ courses }
-                        mapDataToSelect={ mapCoursesToSelect } 
-                        name="courseId" 
-                        label="Curso" 
-                        placeholder="Selecione o seu curso"
-                    />
+                    <MaskedInput symbol="@" format={usernameFormat} placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário"/>
+                    <MaskedInput format={fullnameFormat} placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo"/>
+                    <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email"/>
                     
-                    <AsyncSelect 
-                        data = { universities }
-                        name="university"  
-                        label="Universidade" 
-                        isLoading={ isUniversitiesLoading }
-                        loadAsync={ loadUniversities }
-                        mapDataToSelect = { mapUniversitiesToSelect }
-                        placeholder="Pesquise pela sua universidade (por sigla)"
-                    />
+                    <div className="passwords">
+                        <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha"/>
+                        <Input placeholder="Confirme a sua senha..." type="password" 
+                            name="confirmPassword" label="Confirmação de senha" />
+                    </div>
 
-                </div>
+                    <div className="academics">
 
-                <Checkbox label="Li e aceito os termos e condições de uso" name="termsAccepted"/>
+                        <Select 
+                            data={ courses }
+                            mapDataToSelect={ mapCoursesToSelect } 
+                            name="courseId" 
+                            label="Curso" 
+                            placeholder="Selecione o seu curso"
+                        />
+                        
+                        <AsyncSelect 
+                            data = { universities }
+                            name="university"  
+                            label="Universidade" 
+                            isLoading={ isUniversitiesLoading }
+                            loadAsync={ loadUniversities }
+                            mapDataToSelect = { mapUniversitiesToSelect }
+                            placeholder="Pesquise pela sua universidade (por sigla)"
+                        />
 
-                <Button className="submit-button" type="submit">Enviar</Button>
+                    </div>
 
-            </Form>
+                    <Checkbox label="Li e aceito os termos e condições de uso" name="termsAccepted"/>
 
-        </Formik>
-        
+                    <Button className="submit-button" type="submit">Enviar</Button>
+
+                </Form>
+
+            </Formik>
+        </>
     )
 }
 
 const mapStateToProps = (state:AppState): IStateProps => ({
     registeredUser: state.users.data,
+    errors: state.users.error,
     universities: state.universities.data,
     isUniversitiesLoading: state.universities.pending,
     courses: state.courses.data

@@ -48,7 +48,7 @@ const AsyncSelect: React.FC<IProps> =
           onChange={ x => helpers.setValue(x!.value) }
           onInputChange={ e => setValueToSearch(e) }
           onKeyDown={ e => e.key === 'Enter' && searchValues() }
-          noOptionsMessage={({ inputValue }) => `Não encontramos resultados para ${inputValue}`} 
+          noOptionsMessage={({ inputValue }) => `Não encontramos resultados para a busca ${inputValue}`} 
       />
 
       <small>Tecle enter para pesquisar</small>

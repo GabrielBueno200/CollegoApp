@@ -1,0 +1,43 @@
+@import '../../layout/styles/mixins/mixins';
+@import '../../layout/styles/colors/colors';
+
+.default-warnings{
+    @include alert-el;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    
+    text-align: left;
+
+    &-content{
+        padding: 1em .5em;
+    }
+    
+    .title{
+        display: flex;
+        align-items: center;
+    }
+
+    &-closer{
+        @include flex-center;
+        padding: 0 .5em;
+        min-height: 100%;
+        cursor: pointer;
+        border-left: 1px solid $danger-darker;
+        transition: .5s all ease-out;
+
+        &:hover{
+            color: $light-gray;
+            background-color: $danger-darker;
+            transition: .5s all ease-in;
+        }
+    }
+}
+
+.default-warnings.errors{
+    @include danger-el;
+
+    ul{
+        font-weight: 500;
+    }
+}

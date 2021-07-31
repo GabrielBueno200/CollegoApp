@@ -27,7 +27,7 @@
         justify-content: space-between;
         color: black;
         font-weight: 550;
-        border-bottom: .5px solid $ligh-gray;
+        border-bottom: .5px solid $light-gray;
         padding-bottom: 1em;
         
         .modal-close-icon {
@@ -40,6 +40,10 @@
         margin: 1em 0;
         max-height: calc(100vh - 250px);
         overflow-y: auto;
+
+        .default-warnings{
+            width: 99%;
+        }
     }
     
 }

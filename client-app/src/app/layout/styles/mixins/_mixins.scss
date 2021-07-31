@@ -20,5 +20,12 @@
 
 @mixin danger-el{
     background-color: $danger;
-    border: 1px solid $danger-border;
+    color: $danger-darker;
+    border: 1px solid $danger-darker;
+}
+
+@mixin alert-el{
+    background-color: $alert;
+    color: $alert-darker;
+    border: 1px solid $alert-darker;
 }

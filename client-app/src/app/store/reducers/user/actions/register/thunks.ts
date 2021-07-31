@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { requestingUser, failedRequestingUser } from '../default/defaultActions';
+import { requestingUser, failedRequestingUser, clearUserErrors } from '../default/defaultActions';
 import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
 import { IUserRegister } from '../../../../../models/users/register';
@@ -19,9 +19,12 @@ export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch 
     try {
         
         dispatch(requestingUser());
-           await api.signUp(data);
+        
+        await api.signUp(data);
 
         dispatch(userRegisterAction());
+
+        dispatch(clearUserErrors());
 
     }
 

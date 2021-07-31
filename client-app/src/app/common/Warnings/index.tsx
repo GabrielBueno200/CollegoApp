@@ -3,37 +3,67 @@ import React, { useState } from 'react'
 /* Icons */
 import { MdErrorOutline } from 'react-icons/md';
 import { AiFillCloseCircle } from 'react-icons/ai';
-
+import { GoVerified } from 'react-icons/go';
 
 /* Styles */
 import './styles.scss';
 
+/* Models */
+import { ISuccess } from '../../store/reducers/models/success';
+
 interface IProps{
     areErrors?: boolean;
-    data: any;
+    isAlertWarning: boolean;
+    data: any | ISuccess;
     onClose: () => void;
 };
 
-const Warnings: React.FC<IProps> = ({ areErrors, data, onClose }) => {
-
+const Warnings: React.FC<IProps> = ({ areErrors, data, isAlertWarning, onClose }) => {
 
     return (
         
-        <div className={`default-warnings ${!!areErrors ? 'errors' : ''}`}>
+        <div className=
+            {
+              `default-warnings 
+              ${!!areErrors ? 'errors' : ''}
+              ${!isAlertWarning && !areErrors ? 'success' : ''}`
+            }
+        >
             
             <div className="default-warnings-content">
 
-                {areErrors && <h3 className="title"><MdErrorOutline/> Erro!</h3>}
+                <h3 className="title">
+                    {
+                        (!isAlertWarning && !areErrors) ?
+                            (<><GoVerified/> {data.title}</>)
+                        
+                        : areErrors ? 
+                            (<><MdErrorOutline/> Erro!</>)
 
-                {areErrors && (
-                    <ul>{
+                        : <></>
+                    }
+                </h3>
 
-                        data.errors.map( ( { message } : { message: string }, idx: number ) =>
-                            <li key={idx}> - { message }</li>
-                        )
 
-                    }</ul>
-                )}          
+                {
+                    (!isAlertWarning && !areErrors) ?
+
+                        <>{data.body}</>
+
+                    : areErrors ? (
+
+                        <ul>{
+
+                            data.errors.map( ( { message } : { message: string }, idx: number ) =>
+                                <li key={idx}> - { message }</li>
+                            )
+
+                        }</ul>
+                        
+                    )
+
+                    : <></>
+                }          
 
             </div> 
 
@@ -42,7 +72,7 @@ const Warnings: React.FC<IProps> = ({ areErrors, data, onClose }) => {
             </div>
 
         </div>
-        
+
     );
 };
 

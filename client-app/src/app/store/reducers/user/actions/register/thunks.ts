@@ -4,13 +4,16 @@ import { default as api } from '../endpoints';
 import { UserActions, UserTypes } from '..';
 import { IUserRegister } from '../../../../../models/users/register';
 import { AsyncAction } from '../../../..';
+import { IUser } from '../../../../../models/users/user';
+import { ISuccess } from '../../../models/success';
 
 
 /**
  *  Action body 
  */
-const userRegisterAction = (): UserActions => ({
-    type: UserTypes.USER_REGISTERED_SUCCESS
+const userRegisterAction = (user: IUser, successMessage: ISuccess): UserActions => ({
+    type: UserTypes.USER_REGISTERED_SUCCESS,
+    payload: { user, successMessage }
 });
 
 
@@ -20,9 +23,16 @@ export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch 
         
         dispatch(requestingUser());
         
-        await api.signUp(data);
+        const user = await api.signUp(data);
 
-        dispatch(userRegisterAction());
+        const successMessage: ISuccess = {
+            title: "Cadastrado com sucesso!",
+            body: `Seja bem-vindo ao Collego, ${user.fullName.split(' ')[0]}!`
+        }; 
+
+        console.log(successMessage)
+
+        dispatch(userRegisterAction(user, successMessage));
 
         dispatch(clearUserErrors());
 

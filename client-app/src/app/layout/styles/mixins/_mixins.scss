@@ -29,3 +29,9 @@
     color: $alert-darker;
     border: 1px solid $alert-darker;
 }
+
+@mixin success-el{
+    background-color: $success;
+    color: $success-darker;
+    border: 1px solid $success-darker;
+}

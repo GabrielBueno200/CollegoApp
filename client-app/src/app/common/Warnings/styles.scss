@@ -23,19 +23,38 @@
         padding: 0 .5em;
         min-height: 100%;
         cursor: pointer;
-        border-left: 1px solid $danger-darker;
         transition: .5s all ease-out;
 
         &:hover{
-            color: $light-gray;
-            background-color: $danger-darker;
             transition: .5s all ease-in;
         }
     }
-}
 
-.default-warnings.errors{
-    @include danger-el;
+    &.errors{
+        @include danger-el;
+
+        &-closer{
+            border-left: 1px solid $danger-darker;
+    
+            &:hover{
+                color: $light-gray;
+                background-color: $danger-darker;
+            }
+        }
+    }
+
+    &.success{
+        @include success-el;
+
+        &-closer{
+            border-left: 1px solid $success-darker;
+    
+            &:hover{
+                color: $light-gray;
+                background-color: $success-darker;
+            }
+        }
+    }
 
     ul{
         font-weight: 500;

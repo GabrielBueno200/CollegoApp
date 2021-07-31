@@ -1,4 +1,5 @@
 import { IUser } from "../../../../../models/users/user";
+import { ISuccess } from "../../../models/success";
 
 /**
  * Actions Types
@@ -12,7 +13,7 @@ import { IUser } from "../../../../../models/users/user";
  */
 interface RegisteredUser {
     type: typeof RegisterTypes.USER_REGISTERED_SUCCESS,
-    payload?: IUser
+    payload: { user: IUser, successMessage : ISuccess }
 };
 
 export type RegisterActions = RegisteredUser

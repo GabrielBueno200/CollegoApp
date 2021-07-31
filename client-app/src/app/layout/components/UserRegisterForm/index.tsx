@@ -12,6 +12,7 @@ import { EmptyUserRegisterObject, IUserRegister } from '../../../models/users/re
 import { IUser } from '../../../models/users/user';
 import { ICourse } from '../../../models/courses/course';
 import { IUniversity } from '../../../models/universities/university';
+import { ISuccess } from '../../../store/reducers/models/success';
 
 /* Redux */
 import { AppDispatch, AppState } from '../../../store';
@@ -41,6 +42,7 @@ interface IStateProps {
     universities: IUniversity[] | [];
     isUniversitiesLoading: boolean;
     courses: ICourse[] | [];
+    success?: ISuccess;
     errors: any;
 };
 
@@ -62,15 +64,18 @@ const UserRegisterForm: React.FC<IProps> = ({
     findUniversitiesByAcronym,
     isUniversitiesLoading,
     errors,
+    success
 }) => {
 
     const [ user ] = useState<IUserRegister>({...EmptyUserRegisterObject});
 
-    const [ hasWarnings, showWarnings, Warnings ] = useWarnings([errors, true]);
+    const [ hasWarnings, showWarnings, Warnings ] = useWarnings([ errors || success, !!errors, false ]);
 
     const handleSubmit = useCallback(async (data:IUserRegister) => { 
         
         await signUpAsync(data);
+
+        console.log(success!)
         
         errors && showWarnings();
 
@@ -134,6 +139,7 @@ const UserRegisterForm: React.FC<IProps> = ({
 const mapStateToProps = (state:AppState): IStateProps => ({
     registeredUser: state.users.data,
     errors: state.users.error,
+    success: state.users.successMessage,
     universities: state.universities.data,
     isUniversitiesLoading: state.universities.pending,
     courses: state.courses.data

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
  * Masks
  */
 export const usernameFormat = (username: string) => 
-    `${username.replace(' ', '')}`.replace(/[$-/:-?{-~!"^`\[\]]/, "").toLowerCase();
+    `${username.replace(' ', '')}`.replace(/[-/$,:-@?{-~!"^`\[\]]/, "").toLowerCase();
 
 export const fullnameFormat = (name: string) =>
     name.split(' ')

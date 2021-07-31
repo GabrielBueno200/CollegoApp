@@ -28,7 +28,7 @@ import Select from '../../../common/Select';
 import AsyncSelect from '../../../common/Select/AsyncSelect';
 
 /* Utils */
-import schema, { usernameMask } from './validation';
+import schema, { usernameFormat } from './validation';
 import { mapCoursesToSelect } from '../../../services/course/map';
 import MaskedInput from '../../../common/Input/MaskedInput';
 
@@ -36,6 +36,7 @@ import MaskedInput from '../../../common/Input/MaskedInput';
 interface IStateProps {
     registeredUser: IUser | {};
     universities: IUniversity[] | [];
+    isUniversitiesLoading: boolean;
     courses: ICourse[] | [];
 };
 
@@ -54,7 +55,8 @@ const UserRegisterForm: React.FC<IProps> = ({
     universities, 
     signUpAsync,
     findCoursesAsync,
-    findUniversitiesByAcronym
+    findUniversitiesByAcronym,
+    isUniversitiesLoading
 }) => {
 
     const [ user ] = useState<IUserRegister>({...EmptyUserRegisterObject});
@@ -71,12 +73,12 @@ const UserRegisterForm: React.FC<IProps> = ({
             
             <Form className="user-register-form">
 
-                <MaskedInput mask={usernameMask} placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário:"/>
-                <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo:"/>
-                <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email:"/>
+                <MaskedInput symbol="@" format={usernameFormat} placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário"/>
+                <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo"/>
+                <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email"/>
                 
                 <div className="passwords">
-                    <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha:"/>
+                    <Input placeholder="Digite a sua senha..." type="password" name="password" label="Senha"/>
                     <Input placeholder="Confirme a sua senha..." type="password" 
                         name="confirmPassword" label="Confirmação de senha" />
                 </div>
@@ -95,6 +97,7 @@ const UserRegisterForm: React.FC<IProps> = ({
                         data = { universities }
                         name="university"  
                         label="Universidade" 
+                        isLoading={ isUniversitiesLoading }
                         loadAsync={ loadUniversities }
                         mapDataToSelect = { mapUniversitiesToSelect }
                         placeholder="Pesquise pela sua universidade (por sigla)"
@@ -102,7 +105,7 @@ const UserRegisterForm: React.FC<IProps> = ({
 
                 </div>
 
-                <Checkbox label="Li e aceito os termos de condições de uso" name="termsAccepted"/>
+                <Checkbox label="Li e aceito os termos e condições de uso" name="termsAccepted"/>
 
                 <Button className="submit-button" type="submit">Enviar</Button>
 
@@ -116,6 +119,7 @@ const UserRegisterForm: React.FC<IProps> = ({
 const mapStateToProps = (state:AppState): IStateProps => ({
     registeredUser: state.users.data,
     universities: state.universities.data,
+    isUniversitiesLoading: state.universities.pending,
     courses: state.courses.data
 });
 

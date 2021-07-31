@@ -1,26 +1,28 @@
+/* Modules */
 import React, { useState, useCallback } from 'react';
-import { useField } from 'formik';
-import { IOption } from '../Options';
 import Select from 'react-select';
 
-interface IProps {
-  label: string;
-  name: string;
-  options?: IOption[];
-  className?: string;
-  placeholder: string;
-  value?: string;
-  loadAsync: (valueToSearch: string) => Promise<void>;
-  mapDataToSelect: (data: any[]) => IOption[];
-  data: any[];
-};
+/* Hooks */
+import { useField } from 'formik';
 
+/* Models */
+import { IOption } from '../Options';
+import ISelectProps from '../models/props';
+
+/* Styles */
+import { styles } from '../models/styles';
+
+interface IProps extends ISelectProps {
+  loadAsync: (valueToSearch: string) => Promise<void>;
+  isLoading: boolean;
+};
 
 const AsyncSelect: React.FC<IProps> = 
   ({ 
     label, 
-    loadAsync,
     data,
+    loadAsync,
+    isLoading,
     mapDataToSelect,
     ...props 
   }) => {
@@ -31,15 +33,19 @@ const AsyncSelect: React.FC<IProps> =
 
   const searchValues = async () => await loadAsync(valueToSearch);
 
+  const loadingOption : IOption[] = [{ value: 0, label: "Procurando pela sua universidade..." }];
+
+
+
   return (
     <span className={`default-select`}>
 
-      <label className="default-select-label">{ label }</label>
-      <Select
+      <label className="default-select-label">{ label }:</label>
+      <Select styles={ styles }
           className="default-select-field"
           name={ props.name }
           placeholder={ props.placeholder } 
-          options={ mapDataToSelect(data) }
+          options={ !isLoading ? mapDataToSelect(data) : loadingOption }
           onChange={ x => helpers.setValue(x!.value) }
           onInputChange={ e => setValueToSearch(e) }
           onKeyDown={ e => e.key === 'Enter' && searchValues() }

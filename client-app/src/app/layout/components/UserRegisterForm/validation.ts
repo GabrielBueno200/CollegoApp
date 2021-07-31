@@ -3,23 +3,8 @@ import * as Yup from 'yup';
 /**
  * Masks
  */
-export const usernameMask = [
-    "(",
-    /[1-9]/,
-    /\d/,
-    /\d/,
-    ")",
-    " ",
-    /\d/,
-    /\d/,
-    /\d/,
-    "-",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/
-  ];
-
+export const usernameFormat = (username: string) => 
+    `${username.replace(' ', '')}`.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
 
 /**
  * Validation
@@ -29,10 +14,9 @@ class ValidationConstants {
     static PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
     static PASSWORD_ERROR = "Deve conter 6 caracteres, um maiúsculo, um minúsculo, um numérico e um especial!";
     static PASS_DONT_MATCH_ERROR = "As senhas informadas não coincidem";
-    static ACCEPT_TERMS_ERROR = "Você só poderá continuar se aceitar os termos de uso";
+    static ACCEPT_TERMS_ERROR = "Você só poderá prosseguir se aceitar os termos de uso";
 
 };
-
 
 const schema = Yup.object({
 

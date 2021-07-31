@@ -2,10 +2,10 @@ import * as Yup from 'yup';
 
 Yup.setLocale({
   mixed: {
-    required: 'Preencha esse campo para continuar'
+    required: 'Preencha esse campo para prosseguir'
   },
   string: {
-    email: 'Preencha um e-mail válido',
+    email: 'Insira um endereço de e-mail válido',
     min: 'Valor muito curto (mínimo ${min} caracteres)',
     max: 'Valor muito longo (máximo ${max} caracteres)',
   },

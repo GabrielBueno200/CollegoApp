@@ -1,7 +1,6 @@
 @import '../../layout/styles/mixins/mixins';
 
 .default-select{
-
     margin-top: 5px;
     text-align: left;
     width: 100%;
@@ -11,9 +10,8 @@
         border: 1px solid $secondary-color;
         border-radius: 4px;
         display: block;
-        transition: .5s all ease;
-    
-        &:focus{
+
+        &:focus-within {
             border-color: $primary-color;
             transition: .5s all ease;
         }

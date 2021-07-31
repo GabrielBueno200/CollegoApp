@@ -1,30 +1,27 @@
+/* Models */
 import React from 'react';
-import { useField } from 'formik';
-import './styles.scss';
-import { IOption } from './Options';
 import { default as ReactSelect } from 'react-select';
 
-interface IProps {
-  label: string;
-  name: string;
-  hasButton?: boolean;
-  className?: string;
-  placeholder: string;
-  value?: string;
-  data: any;
-  mapDataToSelect: (data: any[]) => IOption[];
-}
+/* Hooks */
+import { useField } from 'formik';
 
-const Select: React.FC<IProps> = ({ label, data, mapDataToSelect, children, ...props }) => {
+/* Models */
+import ISelectProps from './models/props';
+
+/* Styles*/
+import { styles } from './models/styles';
+import './styles.scss';
+
+const Select: React.FC<ISelectProps> = ({ label, data, mapDataToSelect, children, ...props }) => {
   
   const [field, meta, helpers] = useField(props);
 
   return (
     <span className={`default-select`}>
 
-      <label className="default-select-label">{ label }</label>
+      <label className="default-select-label">{ label }:</label>
       
-      <ReactSelect 
+      <ReactSelect styles={ styles }
           className="default-select-field"
           name={ props.name }
           options={ mapDataToSelect(data) }

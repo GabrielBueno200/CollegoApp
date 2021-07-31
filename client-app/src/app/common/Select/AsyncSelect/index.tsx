@@ -36,7 +36,6 @@ const AsyncSelect: React.FC<IProps> =
   const loadingOption : IOption[] = [{ value: 0, label: "Procurando pela sua universidade..." }];
 
 
-
   return (
     <span className={`default-select`}>
 
@@ -49,6 +48,7 @@ const AsyncSelect: React.FC<IProps> =
           onChange={ x => helpers.setValue(x!.value) }
           onInputChange={ e => setValueToSearch(e) }
           onKeyDown={ e => e.key === 'Enter' && searchValues() }
+          noOptionsMessage={({ inputValue }) => `Não encontramos resultados para ${inputValue}`} 
       />
 
       <small>Tecle enter para pesquisar</small>

@@ -28,7 +28,7 @@ import Select from '../../../common/Select';
 import AsyncSelect from '../../../common/Select/AsyncSelect';
 
 /* Utils */
-import schema, { usernameFormat } from './validation';
+import schema, { usernameFormat, fullnameFormat } from './validation';
 import { mapCoursesToSelect } from '../../../services/course/map';
 import MaskedInput from '../../../common/Input/MaskedInput';
 
@@ -74,7 +74,7 @@ const UserRegisterForm: React.FC<IProps> = ({
             <Form className="user-register-form">
 
                 <MaskedInput symbol="@" format={usernameFormat} placeholder="Digite o seu username..." type="text" name="userName" label="Nome de usuário"/>
-                <Input placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo"/>
+                <MaskedInput format={fullnameFormat} placeholder="Digite o seu nome completo.." type="text" name="fullName" label="Nome completo"/>
                 <Input placeholder="Digite o seu endereço de e-mail..." type="email" name="email" label="Email"/>
                 
                 <div className="passwords">

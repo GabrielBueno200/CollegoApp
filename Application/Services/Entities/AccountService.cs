@@ -18,8 +18,6 @@ namespace Application.Services.Entities
 
         private readonly ITokenGeneratorService _tokenGeneratorService;
 
-        private readonly IRefreshTokenRepository _tokenRepository;
-        
         private readonly IMapper _mapper;
 
         private readonly IValidator<UserRegisterDTO> _registerDTOValidator;
@@ -34,12 +32,10 @@ namespace Application.Services.Entities
                               IValidator<UserRegisterDTO> registerDTOValidator,
                               IValidator<UserLoginDTO> loginDTOValidator,
                               ITokenGeneratorService tokenGeneratorService,
-                              IRefreshTokenRepository tokenRepository,
                               NotificationsContext notificationsContext){
             _accountRepository = accountRepository;
             _userService = userService;
             _tokenGeneratorService = tokenGeneratorService;
-            _tokenRepository = tokenRepository;
             _mapper = mapper;
             _loginDTOValidator = loginDTOValidator;
             _registerDTOValidator = registerDTOValidator;

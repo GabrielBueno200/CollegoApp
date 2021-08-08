@@ -1,4 +1,12 @@
+import { IAuthenticationResult } from "../../../../../models/token/authResult";
 import { IUser } from "../../../../../models/users/user";
+
+/* Custom Payload Interface*/
+
+export interface IUserAuth {
+    tokens: IAuthenticationResult,
+    user: IUser
+};
 
 /**
  * Actions Types

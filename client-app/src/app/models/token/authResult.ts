@@ -1,7 +1,7 @@
-export interface AuthenticationResult {
+export interface IAuthenticationResult {
     authenticated: boolean;
-    created: Date;
-    expiry: Date;
+    created: string;
+    expiry: string;
     refreshToken: string;
     accessToken: string;
 };

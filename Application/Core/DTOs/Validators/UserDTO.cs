@@ -20,7 +20,9 @@ namespace Application.Core.DTOs.Validators
 
         public UserLoginDTOValidator(){
 
-            RuleFor(x => x.Email).EmailAddress().Must((x, value, ctx) => x.UserName == null || (value == null && x.UserName != null)).WithMessage("Insira e-mail ou username (não ambos)!");
+            /* LOGIN COM USERNAME OU E-MAIL - REIMPLEMENTAR DEPOIS 
+            RuleFor(x => x.Email).EmailAddress().Must((x, value, ctx) => x.UserName == null || (value == null && x.UserName != null)).WithMessage("Insira e-mail ou username (não ambos)!");*/
+            RuleFor(x => x.UserName).NotNull().WithMessage(ErrorsConstants.FORGOT_FIELD);
             RuleFor(x => x.Password).NotNull().WithMessage(ErrorsConstants.FORGOT_FIELD);
         }
     }

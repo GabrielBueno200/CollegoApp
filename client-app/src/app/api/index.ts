@@ -22,7 +22,7 @@ api.interceptors.response.use(undefined, error => {
 
 
 /* Own Methods */
-const responseBody = <T> (response: AxiosResponse<T>)=> response.data;
+const responseBody = <T> (response: AxiosResponse<T>) => response.data;
 
 export default class Requestable{
 

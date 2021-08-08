@@ -71,13 +71,13 @@ const UserRegisterForm: React.FC<IProps> = ({
 
     const [ hasWarnings, showWarnings, Warnings ] = useWarnings([ errors || success, !!errors, false ]);
 
-    const handleSubmit = useCallback(async (data:IUserRegister) => { 
+    const handleSubmit = async (data:IUserRegister) => { 
         
         await signUpAsync(data);
         
         (success || errors) && showWarnings();
 
-    }, [registeredUser]);
+    };
     
     const loadUniversities = useCallback(async (acronym: string) => await findUniversitiesByAcronym(acronym), [universities]);
 

@@ -9,7 +9,7 @@ namespace Domain.Models{
         [Required]
         public string FullName { get; set; }
 
-        public double University { get; set; }
+        public int? University { get; set; }
 
         public string Bio { get; set; }
 

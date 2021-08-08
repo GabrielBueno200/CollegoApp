@@ -7,13 +7,12 @@ import { UserActions, UserTypes } from '..';
 import { IUserLogin } from '../../../../../models/users/login';
 import { AsyncAction } from '../../../..';
 import { storeTokens } from '../../../../../services/user/login';
-import { AuthenticationResult } from '../../../../../models/token/authResult';
 
 
 /**
  *  Action body 
  */
-const userLoginAction = (user: IUser & AuthenticationResult): UserActions => ({
+const userLoginAction = (user: IUser): UserActions => ({
     type: UserTypes.USER_LOGGEDIN_SUCCESS,
     payload: user
 });
@@ -25,11 +24,11 @@ const signInAsync = (data: IUserLogin): AsyncAction => async dispatch => {
         
         dispatch(requestingUser());
 
-        const user = await api.signIn(data);
+        const auth = await api.signIn(data);
 
-        storeTokens(user.accessToken, user.refreshToken);
+        storeTokens(auth.tokens);
 
-        dispatch(userLoginAction(user));
+        dispatch(userLoginAction(auth.user));
 
     }
 

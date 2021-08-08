@@ -24,7 +24,7 @@ const Introduction: React.FC = () => {
             <div className="buttons">
                 <Button className="btn-light" onClick={openLoginModal}>Entrar</Button>
                 <Button onClick={openRegisterModal}>Cadastrar</Button>
-            </div>
+            </div> 
 
             <div className="brand">
                 <h1 className="subtitle">COLLEGO</h1>

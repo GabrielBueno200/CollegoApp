@@ -50,13 +50,13 @@ const UserRegisterForm: React.FC<IProps> = ({
 
     const [ hasWarnings, showWarnings, Warnings ] = useWarnings([ errors, !!errors, false ]);
 
-    const handleSubmit = useCallback(async (data:IUserLogin) => { 
+    const handleSubmit = async (data:IUserLogin) => { 
         
         await signInAsync(data);
-        
+
         errors && showWarnings();
 
-    }, [loggedUser]);
+    };
     
     return(
         <>

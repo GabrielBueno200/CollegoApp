@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 
-using Infrastructure;
-
 namespace Infrastructure
 {
     public class Seed
@@ -31,7 +29,7 @@ namespace Infrastructure
                     new User{
                         Id = "ADM1",
                         FullName = "Gabriel Bueno",
-                        UserName = "gabrielbueno",
+                        UserName = "gabriel.bueno",
                         Email = "gabriel.bueno@collego.com.br",
                         Course = null
                     },
@@ -39,7 +37,7 @@ namespace Infrastructure
                     new User{
                         Id = "ADM2",
                         FullName = "Gabriel Duarte",
-                        UserName = "brunobigide",
+                        UserName = "gabriel.duarte",
                         Email = "gabriel.duarte@collego.com.br",
                         Course = null
                     },

@@ -104,27 +104,35 @@ namespace Application.Services.Entities
             #region Login validation
 
             
+            /*LÓGICA PARA LOGIN COM USERNAME OU E-MAIL (REIMPLEMENTAR DEPOIS) 
             var user = userDto.Email != null ? await _userService.FindByEmailAsync(userDto.Email)
                      : userDto.UserName != null ? await _userService.FindByUsernameAsync(userDto.UserName) : null;
 
             if (user == null){
                 _notificationsContext.AddNotification($"Não encontrado usuário cadastrado com o username/e-mail informado!", NotificationType.ENTITY_NOT_FOUND);
                 return null;
+            }*/
+
+            var user = await _userService.FindByUsernameAsync(userDto.UserName);
+
+            if (user == null){
+                _notificationsContext.AddNotification($"Não encontrado usuário cadastrado com o nome de usuário {userDto.UserName}!", NotificationType.ENTITY_NOT_FOUND);
+                return null;
             }
 
             #endregion
 
-            var token = await _tokenGeneratorService.GenerateTokenAsync(user);
-
             var result = await _accountRepository.SignInAsync(user, userDto.Password);
 
             if(!result.Succeeded){
-                _notificationsContext.AddNotification("E-mail ou senha incorreto!", NotificationType.UNPROCESSABLE);
+                _notificationsContext.AddNotification("Nome de usuário ou senha incorreto!", NotificationType.UNPROCESSABLE);
                 return null;
             }
 
+            var tokens = await _tokenGeneratorService.GenerateTokenAsync(user);
+
             return new {
-                token = token,
+                tokens = tokens,
                 user = _mapper.Map<UserViewModel>(user)
             };
 

@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, Store, compose } from 'redux';
 import thunk, { ThunkAction, ThunkDispatch, ThunkMiddleware } from 'redux-thunk';
-import rootReducer, { AppActions } from './reducers'
+import rootReducer, { AppActions } from './reducers';
 
 /*Custom Thunk Types*/
 export type AppState = ReturnType<typeof rootReducer>;

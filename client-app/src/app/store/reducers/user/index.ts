@@ -22,8 +22,7 @@ const UserReducer: Reducer<IUserState> = (state = initialState, action: UserActi
             return { ...state, data: action.payload, pending: false };
 
         case UserTypes.USER_REGISTERED_SUCCESS :
-            return { ...state, error: null, pending: false, 
-                    successMessage: action.payload.successMessage };
+            return { ...state, error: null, pending: false, successMessage: action.payload.successMessage };
 
         case UserTypes.USER_LOGGEDIN_SUCCESS :
             return { ...state, error: null, pending: false, data: action.payload }

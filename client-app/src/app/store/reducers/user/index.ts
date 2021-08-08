@@ -5,6 +5,7 @@ import IUserState from "./models/state";
 const initialState: IUserState = {
     data: {},
     pending: false,
+    error: undefined,
 };
 
 const UserReducer: Reducer<IUserState> = (state = initialState, action: UserActions) => {

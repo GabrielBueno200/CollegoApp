@@ -8,7 +8,7 @@ export type AppDispatch = ThunkDispatch<AppState, undefined, AppActions>;
 export type AsyncAction = ThunkAction<Promise<void>, AppState, undefined, AppActions>;
 /* */
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ as typeof compose || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store: Store<AppState> = createStore(
     rootReducer,

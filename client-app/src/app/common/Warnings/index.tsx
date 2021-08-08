@@ -21,57 +21,60 @@ interface IProps{
 const Warnings: React.FC<IProps> = ({ areErrors, data, isAlertWarning, onClose }) => {
 
     return (
+        data ? 
         
-        <div className=
-            {
-              `default-warnings 
-              ${!!areErrors ? 'errors' : ''}
-              ${!isAlertWarning && !areErrors ? 'success' : ''}`
-            }
-        >
-            
-            <div className="default-warnings-content">
+            <div className=
+                {
+                `default-warnings 
+                ${!!areErrors ? 'errors' : ''}
+                ${!isAlertWarning && !areErrors ? 'success' : ''}`
+                }
+            >
+                
+                <div className="default-warnings-content">
 
-                <h3 className="title">
+                    <h3 className="title">
+                        {
+                            (!isAlertWarning && !areErrors) ?
+                                (<><GoVerified/> {data.title}</>)
+                            
+                            : areErrors ? 
+                                (<><MdErrorOutline/> Erro!</>)
+
+                            : <></>
+                        }
+                    </h3>
+
+
                     {
                         (!isAlertWarning && !areErrors) ?
-                            (<><GoVerified/> {data.title}</>)
-                        
-                        : areErrors ? 
-                            (<><MdErrorOutline/> Erro!</>)
+
+                            <>{data.body}</>
+
+                        : areErrors ? (
+
+                            <ul>{
+
+                                data.errors.map( ( { message } : { message: string }, idx: number ) =>
+                                    <li key={idx}> - { message }</li>
+                                )
+
+                            }</ul>
+                            
+                        )
 
                         : <></>
-                    }
-                </h3>
+                    }          
 
+                </div> 
 
-                {
-                    (!isAlertWarning && !areErrors) ?
+                <div className="default-warnings-closer" onClick={ onClose }>
+                    <AiFillCloseCircle/>
+                </div>
 
-                        <>{data.body}</>
-
-                    : areErrors ? (
-
-                        <ul>{
-
-                            data.errors.map( ( { message } : { message: string }, idx: number ) =>
-                                <li key={idx}> - { message }</li>
-                            )
-
-                        }</ul>
-                        
-                    )
-
-                    : <></>
-                }          
-
-            </div> 
-
-            <div className="default-warnings-closer" onClick={ onClose }>
-                <AiFillCloseCircle/>
             </div>
 
-        </div>
+        : <></>
 
     );
 };

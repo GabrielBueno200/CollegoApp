@@ -75,7 +75,7 @@ const UserRegisterForm: React.FC<IProps> = ({
         
         await signUpAsync(data);
         
-        (success || errors) && showWarnings();
+        showWarnings();
 
     };
     

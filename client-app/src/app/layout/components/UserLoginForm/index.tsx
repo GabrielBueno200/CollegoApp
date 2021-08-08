@@ -1,5 +1,5 @@
 /* Modules | Functions */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 
@@ -41,7 +41,6 @@ type IProps = IStateProps & IDispatchProps;
 
 
 const UserRegisterForm: React.FC<IProps> = ({   
-    loggedUser, 
     signInAsync,
     errors
 }) => {
@@ -54,7 +53,7 @@ const UserRegisterForm: React.FC<IProps> = ({
         
         await signInAsync(data);
 
-        errors && showWarnings();
+        showWarnings();
 
     };
     

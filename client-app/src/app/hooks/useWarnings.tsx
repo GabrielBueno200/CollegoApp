@@ -22,14 +22,12 @@ const useWarnings = ( [ data, areErrors, isAlertWarning ] : WarningHookParams ) 
     const closeWarnings = () => setShowWarnings(false);
 
     const CustomWarnings: React.FC = ({ children }) => 
-        showWarnings ? 
-            <Warnings 
-                data={ data } 
-                areErrors={ areErrors } 
-                onClose={ closeWarnings } 
-                isAlertWarning={ isAlertWarning }
-            />
-        : <></>
+        <Warnings 
+            data={ data } 
+            areErrors={ areErrors } 
+            onClose={ closeWarnings } 
+            isAlertWarning={ isAlertWarning }
+        />
 
     return [showWarnings, openWarnings, CustomWarnings];
 

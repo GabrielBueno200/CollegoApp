@@ -33,7 +33,7 @@ const AsyncSelect: React.FC<IProps> =
 
   const searchValues = async () => await loadAsync(valueToSearch);
 
-  const loadingOption : IOption[] = [{ value: 0, label: "Procurando pela sua universidade..." }];
+  const loadingOption : IOption[] = [{ value: 0, label: "Procurando pela sua busca..." }];
 
 
   return (

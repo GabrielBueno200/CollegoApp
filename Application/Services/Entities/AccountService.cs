@@ -105,7 +105,7 @@ namespace Application.Services.Entities
 
             
             var user = userDto.Email != null ? await _userService.FindByEmailAsync(userDto.Email)
-                     : userDto.Username != null ? await _userService.FindByUsernameAsync(userDto.Username) : null;
+                     : userDto.UserName != null ? await _userService.FindByUsernameAsync(userDto.UserName) : null;
 
             if (user == null){
                 _notificationsContext.AddNotification($"Não encontrado usuário cadastrado com o username/e-mail informado!", NotificationType.ENTITY_NOT_FOUND);

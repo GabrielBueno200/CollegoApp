@@ -1,5 +1,11 @@
 export interface IUserLogin {
-    username: string | null;
+    userName: string | null;
     email: string | null;
     password: string;
-}
+};
+
+export const EmptyUserLoginObject : IUserLogin = {
+    userName: "",
+    email: "",
+    password: ""
+};

@@ -32,8 +32,6 @@ export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch 
 
         dispatch(userRegisterAction(user, successMessage));
 
-        dispatch(clearUserErrors());
-
     }
 
     catch(ex){

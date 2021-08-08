@@ -1,4 +1,5 @@
 import { default as api } from '../../../../api';
+import { AuthenticationResult } from '../../../../models/token/authResult';
 import { ITokens } from '../../../../models/token/token';
 import { IUserLogin } from '../../../../models/users/login';
 import { IUserRegister } from '../../../../models/users/register';
@@ -12,7 +13,7 @@ export enum Endpoints {
 }
 
 interface IUserRequester {
-    signIn: (user:IUserLogin) => Promise<IUser>;
+    signIn: (user:IUserLogin) => Promise<IUser & AuthenticationResult>;
     signUp: (user:IUserRegister) => Promise<IUser>;
     logout: (tokens:ITokens) => void;
     listUser: () => Promise<IUser>;
@@ -21,7 +22,7 @@ interface IUserRequester {
 };
 
 const ApiRequest : IUserRequester = {
-    signIn: (user:IUserLogin) => api.post<IUserLogin, IUser>(Endpoints.signIn, user),
+    signIn: (user:IUserLogin) => api.post<IUserLogin, IUser & AuthenticationResult>(Endpoints.signIn, user),
     signUp: (user:IUserRegister) => api.post<IUserRegister, IUser>(Endpoints.signUp, user),
     logout: (tokens:ITokens) => api.post<ITokens>(Endpoints.logout, tokens),
     listUser: () => api.get<IUser>(Endpoints.listUser),

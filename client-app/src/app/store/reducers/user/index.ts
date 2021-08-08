@@ -24,6 +24,9 @@ const UserReducer: Reducer<IUserState> = (state = initialState, action: UserActi
             return { ...state, error: null, pending: false, 
                     successMessage: action.payload.successMessage };
 
+        case UserTypes.USER_LOGGEDIN_SUCCESS :
+            return { ...state, error: null, pending: false, data: action.payload }
+
         case UserTypes.USER_EXIT_SUCCESS :
             return { ...state, pending: false, user: {}};
         

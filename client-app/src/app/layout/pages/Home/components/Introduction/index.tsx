@@ -1,21 +1,29 @@
 import React from 'react';
-import Button from '../../../../../common/Buttons/Default';
+
+/* Hooks */
 import useModal from '../../../../../hooks/useModal';
+
+/* Components */
 import SearchBar from '../../../../../common/SearchBar';
+import Button from '../../../../../common/Buttons/Default';
 import { default as RegisterForm } from '../../../../components/UserRegisterForm';
+import { default as LoginForm } from '../../../../components/UserLoginForm';
+
+/* Styles */
 import './styles.scss';
 
 const Introduction: React.FC = () => {
 
     const [ isRegistering, openRegisterModal, RegisterModal ] = useModal(["Cadastro de conta", RegisterForm]);
+    const [ isAuthenticating, openLoginModal, LoginModal ] = useModal(["Entrar", LoginForm]);
   
     return( 
     
         <div className="introduction">
             
             <div className="buttons">
-                <Button className="btn-light">Logar</Button>
-                <Button onClick={() => openRegisterModal()}>Cadastrar</Button>
+                <Button className="btn-light" onClick={openLoginModal}>Entrar</Button>
+                <Button onClick={openRegisterModal}>Cadastrar</Button>
             </div>
 
             <div className="brand">
@@ -24,7 +32,9 @@ const Introduction: React.FC = () => {
                 <SearchBar/>
             </div>
 
-            {isRegistering && ( <RegisterModal/> )}
+            { isRegistering && <RegisterModal/> }
+
+            { isAuthenticating && <LoginModal/> }
 
         </div>
 

@@ -20,14 +20,17 @@ interface IProps{
 
 const Warnings: React.FC<IProps> = ({ areErrors, data, isAlertWarning, onClose }) => {
 
+    const isSuccess = !isAlertWarning && !areErrors;
+
+
     return (
         data ? 
-        
+
             <div className=
                 {
                 `default-warnings 
                 ${!!areErrors ? 'errors' : ''}
-                ${!isAlertWarning && !areErrors ? 'success' : ''}`
+                ${isSuccess ? 'success' : ''}`
                 }
             >
                 
@@ -35,7 +38,7 @@ const Warnings: React.FC<IProps> = ({ areErrors, data, isAlertWarning, onClose }
 
                     <h3 className="title">
                         {
-                            (!isAlertWarning && !areErrors) ?
+                            isSuccess ?
                                 (<><GoVerified/> {data.title}</>)
                             
                             : areErrors ? 
@@ -47,7 +50,7 @@ const Warnings: React.FC<IProps> = ({ areErrors, data, isAlertWarning, onClose }
 
 
                     {
-                        (!isAlertWarning && !areErrors) ?
+                        isSuccess ?
 
                             <>{data.body}</>
 

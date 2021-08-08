@@ -30,8 +30,6 @@ export const signUpAsync = (data: IUserRegister): AsyncAction => async dispatch 
             body: `Seja bem-vindo ao Collego, ${user.fullName.split(' ')[0]}!`
         }; 
 
-        console.log(successMessage)
-
         dispatch(userRegisterAction(user, successMessage));
 
         dispatch(clearUserErrors());

@@ -5,7 +5,7 @@ import { ISuccess } from "../../../models/success";
  * Actions Types
  */
  export enum RegisterTypes {
-    USER_REGISTERED_SUCCESS = "@user/USER_LOGGEDIN_SUCCESS",
+    USER_REGISTERED_SUCCESS = "@user/USER_REGISTERED_SUCCESS",
 };
 
 /**

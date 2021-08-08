@@ -10,7 +10,6 @@ export type AsyncAction = ThunkAction<Promise<void>, AppState, undefined, AppAct
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ as typeof compose || compose;
 
-
 const store: Store<AppState> = createStore(
     rootReducer,
     composeEnhancers(

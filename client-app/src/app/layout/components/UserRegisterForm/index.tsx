@@ -74,10 +74,8 @@ const UserRegisterForm: React.FC<IProps> = ({
     const handleSubmit = useCallback(async (data:IUserRegister) => { 
         
         await signUpAsync(data);
-
-        console.log(success!)
         
-        errors && showWarnings();
+        (success || errors) && showWarnings();
 
     }, [registeredUser]);
     

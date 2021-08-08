@@ -15,14 +15,14 @@ type WarningHookParams = [
 
 const useWarnings = ( [ data, areErrors, isAlertWarning ] : WarningHookParams ) : WarningHookReturn  => {
 
-    const [ showWarnings, setShowWarnings ] = useState<boolean>(false);
+    const [ hasWarnings, setHasWarnings ] = useState<boolean>(false);
     
-    const openWarnings = () => setShowWarnings(true);
+    const openWarnings = () => setHasWarnings(true);
 
-    const closeWarnings = () => setShowWarnings(false);
+    const closeWarnings = () => setHasWarnings(false);
 
     const CustomWarnings: React.FC = ({ children }) => 
-        showWarnings ? 
+        hasWarnings ? 
             <Warnings 
                 data={ data } 
                 areErrors={ areErrors } 
@@ -31,7 +31,7 @@ const useWarnings = ( [ data, areErrors, isAlertWarning ] : WarningHookParams ) 
             />
         : <></>
 
-    return [showWarnings, openWarnings, CustomWarnings];
+    return [hasWarnings, openWarnings, CustomWarnings];
 
 }
 

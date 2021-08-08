@@ -24,8 +24,6 @@ const findCoursesAsync = (): AsyncAction => async dispatch => {
 
     catch (ex) {
 
-    
-        console.log(ex)
         const error = (ex as AxiosError).response!.data;
 
         dispatch(failedRequestingCourse(error));
